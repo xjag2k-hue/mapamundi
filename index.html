@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Mapamundi Interactivo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #e8f4f8;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      touch-action: none;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a4a7a 0%, #2c6fad 100%);
+      color: white;
+      padding: 14px 24px;
+      text-align: center;
+      font-size: 1.35rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    header span {
+      font-size: 1.5rem;
+      margin-right: 8px;
+    }
+
+    #app {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── MAP ─────────────────────────────────────────── */
+    #map-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    svg#map {
+      width: 100%;
+      height: 100%;
+      background: #b8ddf0;
+      display: block;
+      cursor: grab;
+    }
+
+    svg#map:active { cursor: grabbing; }
+
+    .graticule {
+      fill: none;
+      stroke: rgba(255,255,255,0.28);
+      stroke-width: 0.4;
+    }
+
+    .country {
+      fill: #c9dea8;
+      stroke: #7a9a60;
+      stroke-width: 0.4;
+      cursor: pointer;
+      transition: fill 0.15s;
+    }
+
+    .country:hover  { fill: #a8c97e; }
+    .country.selected {
+      fill: #f4a340;
+      stroke: #b86800;
+      stroke-width: 1;
+    }
+
+    .borders {
+      fill: none;
+      stroke: #5a7a45;
+      stroke-width: 0.6;
+      pointer-events: none;
+    }
+
+    /* ── SIDE PANEL ──────────────────────────────────── */
+    #info-panel {
+      width: 230px;
+      background: #fff;
+      border-left: 2px solid #c0d4e8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 20px;
+      box-shadow: -4px 0 16px rgba(0,0,0,0.12);
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .placeholder-icon { font-size: 2.8rem; opacity: 0.4; }
+
+    .placeholder-text {
+      color: #99a8b8;
+      font-size: 0.95rem;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    #flag-wrapper {
+      width: 190px;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.22);
+      border: 1px solid #dde;
+      display: none;
+    }
+
+    #flag-img {
+      width: 100%;
+      display: block;
+    }
+
+    #country-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #1a3a5c;
+      text-align: center;
+      line-height: 1.3;
+      display: none;
+    }
+
+    /* ── SPEAKER BUTTON ──────────────────────────────── */
+    #speak-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: #2c6fad;
+      color: white;
+      border: none;
+      border-radius: 24px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(44,111,173,0.35);
+      transition: background 0.15s, transform 0.1s;
+      user-select: none;
+      width: 100%;
+    }
+
+    #speak-btn:active { background: #1a4a7a; transform: scale(0.97); }
+
+    #speak-btn.speaking {
+      background: #e05a00;
+      animation: pulse-btn 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse-btn {
+      from { box-shadow: 0 2px 8px rgba(224,90,0,0.3); }
+      to   { box-shadow: 0 4px 18px rgba(224,90,0,0.7); }
+    }
+
+    #speak-icon { font-size: 1.3rem; }
+
+    /* ── ZOOM CONTROLS ───────────────────────────────── */
+    #zoom-controls {
+      position: absolute;
+      bottom: 20px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .zoom-btn {
+      width: 48px;
+      height: 48px;
+      background: white;
+      border: 1.5px solid #c0c8d8;
+      border-radius: 8px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+      user-select: none;
+      color: #2c5f8a;
+      transition: background 0.15s;
+    }
+
+    .zoom-btn:active { background: #e8f0f8; }
+
+    /* ── TOOLTIP ─────────────────────────────────────── */
+    #tooltip {
+      position: absolute;
+      background: rgba(20,40,70,0.82);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      pointer-events: none;
+      display: none;
+      white-space: nowrap;
+      z-index: 20;
+    }
+
+    /* ── LOADING ─────────────────────────────────────── */
+    #loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(232,244,248,0.92);
+      gap: 14px;
+      z-index: 30;
+    }
+
+    .spinner {
+      width: 42px; height: 42px;
+      border: 4px solid #c0d4e8;
+      border-top-color: #2c6fad;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #loading p { color: #5a7a9a; font-size: 1rem; }
+
+    /* ── RESPONSIVE (portrait tablet / mobile) ───────── */
+    @media (max-width: 700px) {
+      #info-panel {
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        width: 100%;
+        height: 160px;
+        flex-direction: row;
+        padding: 14px 20px;
+        border-left: none;
+        border-top: 2px solid #c0d4e8;
+        box-shadow: 0 -4px 16px rgba(0,0,0,0.12);
+        justify-content: flex-start;
+        gap: 20px;
+        z-index: 15;
+      }
+
+      #flag-wrapper { width: 120px; flex-shrink: 0; }
+
+      #country-name { font-size: 1.1rem; text-align: left; }
+
+      .placeholder-text { font-size: 0.85rem; }
+
+      #zoom-controls { bottom: 170px; }
+      #speak-btn { padding: 8px 14px; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header><span>🌍</span>Mapamundi Interactivo</header>
+
+<div id="app">
+  <div id="map-container">
+    <svg id="map">
+      <g id="world-group"></g>
+    </svg>
+
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>Cargando mapa del mundo…</p>
+    </div>
+
+    <div id="tooltip"></div>
+
+    <div id="zoom-controls">
+      <button class="zoom-btn" id="btn-in"  title="Acercar">＋</button>
+      <button class="zoom-btn" id="btn-out" title="Alejar">－</button>
+      <button class="zoom-btn" id="btn-rst" title="Restablecer" style="font-size:1.1rem">⌂</button>
+    </div>
+  </div>
+
+  <div id="info-panel">
+    <div class="placeholder-icon">👆</div>
+    <div class="placeholder-text">Tocá un país<br>en el mapa para<br>ver su bandera</div>
+    <div id="flag-wrapper">
+      <img id="flag-img" alt="Bandera">
+    </div>
+    <div id="country-name"></div>
+    <button id="speak-btn" title="Escuchar nombre">
+      <span id="speak-icon">🔊</span>
+      <span id="speak-label">Escuchar</span>
+    </button>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────
+//  ISO-3166 numeric  →  alpha-2 (lowercase)
+// ─────────────────────────────────────────────────────
+const NUM_TO_A2 = {
+  4:"af",8:"al",12:"dz",20:"ad",24:"ao",28:"ag",32:"ar",36:"au",40:"at",
+  44:"bs",48:"bh",50:"bd",52:"bb",56:"be",84:"bz",204:"bj",64:"bt",
+  68:"bo",70:"ba",72:"bw",76:"br",96:"bn",100:"bg",104:"mm",108:"bi",
+  112:"by",116:"kh",120:"cm",124:"ca",132:"cv",140:"cf",144:"lk",148:"td",
+  152:"cl",156:"cn",170:"co",174:"km",178:"cg",180:"cd",188:"cr",191:"hr",
+  192:"cu",196:"cy",203:"cz",208:"dk",262:"dj",212:"dm",214:"do",218:"ec",
+  818:"eg",222:"sv",226:"gq",232:"er",233:"ee",231:"et",242:"fj",246:"fi",
+  250:"fr",266:"ga",270:"gm",268:"ge",276:"de",288:"gh",308:"gd",300:"gr",
+  320:"gt",324:"gn",624:"gw",328:"gy",332:"ht",340:"hn",348:"hu",352:"is",
+  356:"in",360:"id",364:"ir",368:"iq",372:"ie",376:"il",380:"it",384:"ci",
+  388:"jm",392:"jp",400:"jo",398:"kz",404:"ke",296:"ki",408:"kp",410:"kr",
+  414:"kw",417:"kg",418:"la",422:"lb",426:"ls",430:"lr",434:"ly",438:"li",
+  440:"lt",442:"lu",807:"mk",450:"mg",454:"mw",458:"my",462:"mv",466:"ml",
+  470:"mt",584:"mh",478:"mr",480:"mu",484:"mx",583:"fm",498:"md",492:"mc",
+  496:"mn",499:"me",504:"ma",508:"mz",516:"na",520:"nr",524:"np",528:"nl",
+  554:"nz",558:"ni",562:"ne",566:"ng",578:"no",512:"om",586:"pk",585:"pw",
+  275:"ps",591:"pa",598:"pg",600:"py",604:"pe",608:"ph",616:"pl",620:"pt",
+  634:"qa",642:"ro",643:"ru",646:"rw",659:"kn",662:"lc",670:"vc",882:"ws",
+  674:"sm",678:"st",682:"sa",686:"sn",688:"rs",694:"sl",706:"so",705:"si",
+  703:"sk",90:"sb",710:"za",716:"zw",724:"es",728:"ss",729:"sd",740:"sr",
+  748:"sz",752:"se",756:"ch",760:"sy",762:"tj",834:"tz",764:"th",626:"tl",
+  768:"tg",776:"to",780:"tt",788:"tn",792:"tr",795:"tm",798:"tv",800:"ug",
+  804:"ua",784:"ae",826:"gb",840:"us",858:"uy",860:"uz",548:"vu",336:"va",
+  862:"ve",704:"vn",887:"ye",894:"zm",716:"zw",51:"am",31:"az",238:"fk",
+  540:"nc",854:"bf",76:"br"
+};
+
+// ─────────────────────────────────────────────────────
+//  alpha-2  →  nombre en español
+// ─────────────────────────────────────────────────────
+const NAMES = {
+  "af":"Afganistán","al":"Albania","dz":"Argelia","ad":"Andorra","ao":"Angola",
+  "ag":"Antigua y Barbuda","ar":"Argentina","au":"Australia","at":"Austria",
+  "bs":"Bahamas","bh":"Baréin","bd":"Bangladés","bb":"Barbados","be":"Bélgica",
+  "bz":"Belice","bj":"Benín","bt":"Bután","bo":"Bolivia",
+  "ba":"Bosnia y Herzegovina","bw":"Botsuana","br":"Brasil","bn":"Brunéi",
+  "bg":"Bulgaria","bf":"Burkina Faso","bi":"Burundi","cv":"Cabo Verde",
+  "kh":"Camboya","cm":"Camerún","ca":"Canadá","cf":"Rep. Centroafricana",
+  "td":"Chad","cl":"Chile","cn":"China","cy":"Chipre","co":"Colombia",
+  "km":"Comoras","cg":"Congo","cd":"Congo (RD)","cr":"Costa Rica",
+  "ci":"Costa de Marfil","hr":"Croacia","cu":"Cuba","cz":"Rep. Checa",
+  "dk":"Dinamarca","dj":"Yibuti","dm":"Dominica","do":"Rep. Dominicana",
+  "ec":"Ecuador","eg":"Egipto","sv":"El Salvador","ae":"Emiratos Árabes",
+  "er":"Eritrea","sk":"Eslovaquia","si":"Eslovenia","es":"España",
+  "us":"Estados Unidos","ee":"Estonia","et":"Etiopía","ph":"Filipinas",
+  "fi":"Finlandia","fj":"Fiyi","fr":"Francia","ga":"Gabón","gm":"Gambia",
+  "ge":"Georgia","gh":"Ghana","gd":"Granada","gr":"Grecia","gt":"Guatemala",
+  "gn":"Guinea","gq":"Guinea Ecuatorial","gw":"Guinea-Bisáu","gy":"Guyana",
+  "ht":"Haití","hn":"Honduras","hu":"Hungría","in":"India","id":"Indonesia",
+  "iq":"Irak","ir":"Irán","ie":"Irlanda","is":"Islandia","il":"Israel",
+  "it":"Italia","jm":"Jamaica","jp":"Japón","jo":"Jordania","kz":"Kazajistán",
+  "ke":"Kenia","kg":"Kirguistán","ki":"Kiribati","kw":"Kuwait","la":"Laos",
+  "ls":"Lesoto","lv":"Letonia","lb":"Líbano","lr":"Liberia","ly":"Libia",
+  "li":"Liechtenstein","lt":"Lituania","lu":"Luxemburgo",
+  "mk":"Macedonia del Norte","mg":"Madagascar","my":"Malasia","mw":"Malaui",
+  "mv":"Maldivas","ml":"Malí","mt":"Malta","ma":"Marruecos","mr":"Mauritania",
+  "mu":"Mauricio","mx":"México","mc":"Mónaco","mn":"Mongolia","me":"Montenegro",
+  "mz":"Mozambique","mm":"Myanmar","na":"Namibia","nr":"Nauru","np":"Nepal",
+  "ni":"Nicaragua","ne":"Níger","ng":"Nigeria","kp":"Corea del Norte",
+  "no":"Noruega","nz":"Nueva Zelanda","om":"Omán","nl":"Países Bajos",
+  "pk":"Pakistán","pw":"Palaos","ps":"Palestina","pa":"Panamá",
+  "pg":"Papúa Nueva Guinea","py":"Paraguay","pe":"Perú","pl":"Polonia",
+  "pt":"Portugal","qa":"Catar","gb":"Reino Unido","ro":"Rumanía","ru":"Rusia",
+  "rw":"Ruanda","kn":"San Cristóbal y Nieves","sm":"San Marino",
+  "vc":"San Vicente y Granadinas","lc":"Santa Lucía",
+  "st":"Santo Tomé y Príncipe","sn":"Senegal","rs":"Serbia",
+  "sl":"Sierra Leona","sb":"Islas Salomón","so":"Somalia","lk":"Sri Lanka",
+  "sz":"Suazilandia","za":"Sudáfrica","ss":"Sudán del Sur","sd":"Sudán",
+  "se":"Suecia","ch":"Suiza","sr":"Surinam","sy":"Siria","tj":"Tayikistán",
+  "tz":"Tanzania","th":"Tailandia","tl":"Timor Oriental","tg":"Togo",
+  "to":"Tonga","tt":"Trinidad y Tobago","tn":"Túnez","tm":"Turkmenistán",
+  "tr":"Turquía","tv":"Tuvalu","ua":"Ucrania","ug":"Uganda","uy":"Uruguay",
+  "uz":"Uzbekistán","vu":"Vanuatu","va":"Ciudad del Vaticano",
+  "ve":"Venezuela","vn":"Vietnam","ws":"Samoa","ye":"Yemen","zm":"Zambia",
+  "zw":"Zimbabue","by":"Bielorrusia","am":"Armenia","az":"Azerbaiyán",
+  "fk":"Islas Malvinas","nc":"Nueva Caledonia","kr":"Corea del Sur",
+  "mh":"Islas Marshall","fm":"Micronesia","md":"Moldavia","do":"Rep. Dominicana"
+};
+
+// ─────────────────────────────────────────────────────
+//  D3 setup
+// ─────────────────────────────────────────────────────
+const container = document.getElementById('map-container');
+const svgEl     = document.getElementById('map');
+const svg       = d3.select(svgEl);
+const g         = d3.select('#world-group');
+
+const W = () => container.clientWidth;
+const H = () => container.clientHeight;
+
+function makeProjection() {
+  return d3.geoNaturalEarth1()
+    .scale(W() / 6.4)
+    .translate([W() / 2, H() / 2]);
+}
+
+let projection = makeProjection();
+let path       = d3.geoPath().projection(projection);
+
+// Zoom
+const zoomBehavior = d3.zoom()
+  .scaleExtent([1, 14])
+  .on('zoom', e => g.attr('transform', e.transform));
+
+svg.call(zoomBehavior);
+svg.on('dblclick.zoom', null); // disable dblclick zoom to avoid conflicts
+
+// ─────────────────────────────────────────────────────
+//  Tooltip
+// ─────────────────────────────────────────────────────
+const tooltip = document.getElementById('tooltip');
+
+function showTooltip(evt, text) {
+  tooltip.textContent = text;
+  tooltip.style.display = 'block';
+  moveTooltip(evt);
+}
+
+function moveTooltip(evt) {
+  const e = evt.touches ? evt.touches[0] : evt;
+  const rect = container.getBoundingClientRect();
+  let x = e.clientX - rect.left + 14;
+  let y = e.clientY - rect.top  - 32;
+  if (x + 160 > W()) x = x - 180;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top  = y + 'px';
+}
+
+function hideTooltip() {
+  tooltip.style.display = 'none';
+}
+
+// ─────────────────────────────────────────────────────
+//  Text-to-Speech (Web Speech API)
+// ─────────────────────────────────────────────────────
+const synth     = window.speechSynthesis;
+const speakBtn  = document.getElementById('speak-btn');
+const speakIcon = document.getElementById('speak-icon');
+let   lastSpokenName = '';
+
+// Intentar obtener la mejor voz en español disponible
+let spanishVoice = null;
+
+function loadVoices() {
+  const voices = synth.getVoices();
+  // Preferimos voces en es-ES, es-MX, es-AR o es genérico
+  const preferred = ['es-ES','es-MX','es-AR','es-US','es'];
+  for (const lang of preferred) {
+    const v = voices.find(v => v.lang.startsWith(lang));
+    if (v) { spanishVoice = v; break; }
+  }
+}
+
+// Las voces pueden cargar de forma asíncrona
+loadVoices();
+if (synth.onvoiceschanged !== undefined) {
+  synth.onvoiceschanged = loadVoices;
+}
+
+function speakName(name) {
+  if (!synth) return;
+  synth.cancel(); // detener cualquier locución en curso
+
+  const utter    = new SpeechSynthesisUtterance(name);
+  utter.lang     = 'es-ES';
+  utter.rate     = 0.88;
+  utter.pitch    = 1.05;
+  if (spanishVoice) utter.voice = spanishVoice;
+
+  // Animación del botón
+  speakBtn.classList.add('speaking');
+  speakIcon.textContent = '🔊';
+
+  utter.onend = utter.onerror = () => {
+    speakBtn.classList.remove('speaking');
+    speakIcon.textContent = '🔊';
+  };
+
+  synth.speak(utter);
+}
+
+// Botón para repetir
+speakBtn.addEventListener('click', () => {
+  if (lastSpokenName) speakName(lastSpokenName);
+});
+
+// ─────────────────────────────────────────────────────
+//  Info panel
+// ─────────────────────────────────────────────────────
+const flagWrapper  = document.getElementById('flag-wrapper');
+const flagImg      = document.getElementById('flag-img');
+const countryName  = document.getElementById('country-name');
+const placeholderIcon = document.querySelector('.placeholder-icon');
+const placeholderText = document.querySelector('.placeholder-text');
+
+function selectCountry(alpha2, name) {
+  placeholderIcon.style.display = 'none';
+  placeholderText.style.display = 'none';
+
+  flagImg.src = `https://flagcdn.com/w320/${alpha2}.png`;
+  flagImg.alt = `Bandera de ${name}`;
+  flagImg.onerror = () => {
+    flagImg.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="320" height="213" viewBox="0 0 320 213"><rect width="320" height="213" fill="%23ccc"/><text x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="40">🏳️</text></svg>';
+  };
+
+  flagWrapper.style.display  = 'block';
+  countryName.style.display  = 'block';
+  speakBtn.style.display     = 'flex';
+  countryName.textContent    = name;
+
+  // Pronunciar el nombre automáticamente
+  lastSpokenName = name;
+  speakName(name);
+}
+
+// ─────────────────────────────────────────────────────
+//  Load world data
+// ─────────────────────────────────────────────────────
+let selectedEl = null;
+
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+  .then(r => r.json())
+  .then(world => {
+    document.getElementById('loading').style.display = 'none';
+
+    const features  = topojson.feature(world, world.objects.countries).features;
+    const meshBord  = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
+
+    // Ocean sphere
+    g.append('path')
+      .datum({type: 'Sphere'})
+      .attr('d', path)
+      .attr('fill', '#b8ddf0');
+
+    // Graticule
+    g.append('path')
+      .datum(d3.geoGraticule()())
+      .attr('class', 'graticule')
+      .attr('d', path);
+
+    // Countries
+    g.selectAll('.country')
+      .data(features)
+      .join('path')
+        .attr('class', 'country')
+        .attr('d', path)
+        .on('pointerover', function(evt, d) {
+          const a2   = NUM_TO_A2[+d.id];
+          const name = a2 ? (NAMES[a2] || a2.toUpperCase()) : null;
+          if (name && this !== selectedEl) showTooltip(evt, name);
+        })
+        .on('pointermove', function(evt) {
+          if (this !== selectedEl) moveTooltip(evt);
+        })
+        .on('pointerout', function() {
+          hideTooltip();
+        })
+        .on('click', function(evt, d) {
+          evt.stopPropagation();
+          hideTooltip();
+
+          const a2   = NUM_TO_A2[+d.id];
+          const name = a2 ? (NAMES[a2] || a2.toUpperCase()) : null;
+
+          if (!a2) return;
+
+          // Deselect previous
+          if (selectedEl) d3.select(selectedEl).classed('selected', false);
+          d3.select(this).classed('selected', true);
+          selectedEl = this;
+
+          selectCountry(a2, name);
+        });
+
+    // Country borders (on top)
+    g.append('path')
+      .datum(meshBord)
+      .attr('class', 'borders')
+      .attr('d', path);
+
+  })
+  .catch(() => {
+    document.getElementById('loading').innerHTML =
+      '<p style="color:#c00">Error al cargar el mapa. Verificá tu conexión.</p>';
+  });
+
+// ─────────────────────────────────────────────────────
+//  Zoom buttons
+// ─────────────────────────────────────────────────────
+document.getElementById('btn-in').addEventListener('click', () =>
+  svg.transition().duration(280).call(zoomBehavior.scaleBy, 1.6));
+
+document.getElementById('btn-out').addEventListener('click', () =>
+  svg.transition().duration(280).call(zoomBehavior.scaleBy, 0.625));
+
+document.getElementById('btn-rst').addEventListener('click', () =>
+  svg.transition().duration(480).call(zoomBehavior.transform, d3.zoomIdentity));
+
+// ─────────────────────────────────────────────────────
+//  Resize
+// ─────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  projection = makeProjection();
+  path       = d3.geoPath().projection(projection);
+  g.selectAll('path').attr('d', path);
+});
+</script>
+</body>
+</html>
