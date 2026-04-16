@@ -460,6 +460,1024 @@ const A2_CONTINENT = {
   ir:"as",iq:"as",il:"as",jp:"as",jo:"as",kz:"as",kw:"as",kg:"as",la:"as",
   lb:"as",my:"as",mv:"as",mn:"as",mm:"as",np:"as",kp:"as",om:"as",pk:"as",
   ps:"as",ph:"as",qa:"as",sa:"as",lk:"as",sy:"as",tj:"as",th:"as",tl:"as",
+  tm:"as",tr:"as",ae:"as",uz:"as",vn:"as",ye:"as",kr:"as",
+  // Norteamérica y Caribe
+  ag:"na",bs:"na",bb:"na",bz:"na",ca:"na",cr:"na",cu:"na",dm:"na",do:"na",
+  sv:"na",gd:"na",gt:"na",ht:"na",hn:"na",jm:"na",mx:"na",kn:"na",lc:"na",
+  vc:"na",tt:"na",us:"na",ni:"na",pa:"na",
+  // Sudamérica
+  ar:"sa",bo:"sa",br:"sa",cl:"sa",co:"sa",ec:"sa",gy:"sa",py:"sa",pe:"sa",
+  sr:"sa",uy:"sa",ve:"sa",fk:"sa",
+  // Oceanía
+  au:"oc",fj:"oc",ki:"oc",mh:"oc",fm:"oc",nr:"oc",nz:"oc",pw:"oc",pg:"oc",
+  ws:"oc",sb:"oc",to:"oc",tv:"oc",vu:"oc",nc:"oc",
+};
+
+// Colores por continente: fill base / fill hover / fill seleccionado
+const CONTINENT_COLORS = {
+  eu: {base:"#2e5faa", hover:"#4a7fd4", sel:"#90c4ff"},
+  af: {base:"#a04010", hover:"#c85a20", sel:"#ffaa60"},
+  as: {base:"#6a2ea0", hover:"#8e44c8", sel:"#d09aff"},
+  na: {base:"#0e6e50", hover:"#18986e", sel:"#5ce8b8"},
+  sa: {base:"#2a7a2a", hover:"#3aaa3a", sel:"#90f090"},
+  oc: {base:"#0e6080", hover:"#189ab0", sel:"#70deff"},
+};
+const CONTINENT_DEFAULT = {base:"#2a4060", hover:"#3a5880", sel:"#6ab0ff"};
+
+function getContinentColor(alpha2) {
+  const c = A2_CONTINENT[alpha2];
+  return c ? CONTINENT_COLORS[c] : CONTINENT_DEFAULT;
+}
+
+// ─────────────────────────────────────────────────────
+//  alpha-2  →  idioma(s) oficial(es) en español
+// ─────────────────────────────────────────────────────
+const LANGUAGES = {
+  "af":"Pastún y Dari","al":"Albanés","dz":"Árabe y Bereber","ad":"Catalán",
+  "ao":"Portugués","ag":"Inglés","ar":"Español","au":"Inglés","at":"Alemán",
+  "bs":"Inglés","bh":"Árabe","bd":"Bengalí","bb":"Inglés",
+  "be":"Holandés, Francés y Alemán","bz":"Inglés","bj":"Francés","bt":"Dzongkha",
+  "bo":"Español, Quechua y Aymara","ba":"Bosnio, Croata y Serbio",
+  "bw":"Inglés y Tswana","br":"Portugués","bn":"Malayo","bg":"Búlgaro",
+  "bf":"Francés","bi":"Kirundi y Francés","cv":"Portugués","kh":"Khmer",
+  "cm":"Francés e Inglés","ca":"Inglés y Francés","cf":"Sango y Francés",
+  "td":"Árabe y Francés","cl":"Español","cn":"Chino mandarín","cy":"Griego y Turco",
+  "co":"Español","km":"Comorense, Árabe y Francés","cg":"Francés","cd":"Francés",
+  "cr":"Español","ci":"Francés","hr":"Croata","cu":"Español","cz":"Checo",
+  "dk":"Danés","dj":"Árabe, Somalí y Francés","dm":"Inglés","do":"Español",
+  "ec":"Español","eg":"Árabe","sv":"Español","ae":"Árabe",
+  "er":"Tigriña, Árabe e Inglés","sk":"Eslovaco","si":"Esloveno","es":"Español",
+  "us":"Inglés","ee":"Estonio","et":"Amhárico","ph":"Filipino e Inglés",
+  "fi":"Finés y Sueco","fj":"Inglés, Fiyiano e Hindi","fr":"Francés","ga":"Francés",
+  "gm":"Inglés","ge":"Georgiano","gh":"Inglés","gd":"Inglés","gr":"Griego",
+  "gt":"Español","gn":"Francés","gq":"Español, Francés y Portugués","gw":"Portugués",
+  "gy":"Inglés","ht":"Francés y Criollo haitiano","hn":"Español","hu":"Húngaro",
+  "in":"Hindi e Inglés","id":"Indonesio","iq":"Árabe y Kurdo","ir":"Persa",
+  "ie":"Inglés e Irlandés","is":"Islandés","il":"Hebreo y Árabe","it":"Italiano",
+  "jm":"Inglés","jp":"Japonés","jo":"Árabe","kz":"Kazajo y Ruso",
+  "ke":"Swahili e Inglés","kg":"Kirguís y Ruso","ki":"Inglés y Gilbertés",
+  "kw":"Árabe","la":"Laosiano","ls":"Sesoto e Inglés","lv":"Letón","lb":"Árabe",
+  "lr":"Inglés","ly":"Árabe","li":"Alemán","lt":"Lituano","lu":"Luxemburgués, Francés y Alemán",
+  "mk":"Macedonio","mg":"Malgache y Francés","my":"Malayo","mw":"Chichewa e Inglés",
+  "mv":"Maldivo","ml":"Francés","mt":"Maltés e Inglés","ma":"Árabe y Bereber",
+  "mr":"Árabe","mu":"Inglés, Francés y Criollo","mx":"Español","mc":"Francés",
+  "mn":"Mongol","me":"Montenegrino","mz":"Portugués","mm":"Birmano",
+  "na":"Inglés","nr":"Nauruano e Inglés","np":"Nepalés","ni":"Español",
+  "ne":"Francés","ng":"Inglés","no":"Noruego","nz":"Inglés y Maorí","om":"Árabe",
+  "nl":"Holandés","pk":"Urdu e Inglés","pw":"Palauano e Inglés","ps":"Árabe",
+  "pa":"Español","pg":"Inglés, Tok Pisin y Hiri Motu","py":"Español y Guaraní",
+  "pe":"Español, Quechua y Aymara","pl":"Polaco","pt":"Portugués","qa":"Árabe",
+  "gb":"Inglés","ro":"Rumano","ru":"Ruso","rw":"Kinyarwanda, Francés e Inglés",
+  "kn":"Inglés","sm":"Italiano","vc":"Inglés","lc":"Inglés","st":"Portugués",
+  "sn":"Francés","rs":"Serbio","sl":"Inglés","sb":"Inglés","so":"Somalí y Árabe",
+  "lk":"Cingalés y Tamil","sz":"Suazi e Inglés",
+  "za":"Once idiomas oficiales, principalmente Inglés y Zulú",
+  "ss":"Inglés","sd":"Árabe e Inglés","se":"Sueco",
+  "ch":"Alemán, Francés, Italiano y Romanche","sr":"Holandés","sy":"Árabe",
+  "tj":"Tayiko","tz":"Swahili e Inglés","th":"Tailandés","tl":"Tetum y Portugués",
+  "tg":"Francés","to":"Tongano e Inglés","tt":"Inglés","tn":"Árabe","tm":"Turcomano",
+  "tr":"Turco","tv":"Tuvaluano e Inglés","ua":"Ucraniano","ug":"Inglés y Swahili",
+  "uy":"Español","uz":"Uzbeko","vu":"Bislama, Inglés y Francés","va":"Italiano y Latín",
+  "ve":"Español","vn":"Vietnamita","ws":"Samoano e Inglés","ye":"Árabe",
+  "zm":"Inglés","zw":"Inglés, Shona y Ndebele","by":"Bielorruso y Ruso",
+  "am":"Armenio","az":"Azerbaiyano","fk":"Inglés","nc":"Francés",
+  "kr":"Coreano","mh":"Marshalés e Inglés","fm":"Inglés","md":"Rumano",
+  "de":"Alemán","sa":"Árabe","ad":"Catalán","kp":"Coreano",
+  "ky":"Inglés","mf":"Francés","re":"Francés","gp":"Francés","mq":"Francés"
+};
+
+// ─────────────────────────────────────────────────────
+//  Uniformes de fútbol — colores reales por selección
+// ─────────────────────────────────────────────────────
+// Cada kit: { primary, secondary, pattern, collar }
+// pattern: "solid" | "vstripes" | "hstripes" | "checks" | "halves" | "diagonal"
+const TEAM_KITS = {
+  // SUDAMÉRICA
+  "ar":{home:{primary:"#74ACDF",secondary:"#FFFFFF",pattern:"vstripes",collar:"#74ACDF"},away:{primary:"#1A2357",secondary:"#74ACDF",pattern:"solid",collar:"#FFFFFF"}},
+  "br":{home:{primary:"#FCD116",secondary:"#009C3B",pattern:"solid",collar:"#002776"},away:{primary:"#002776",secondary:"#009C3B",pattern:"solid",collar:"#FCD116"}},
+  "uy":{home:{primary:"#75AADB",secondary:"#FFFFFF",pattern:"vstripes",collar:"#75AADB"},away:{primary:"#FFFFFF",secondary:"#75AADB",pattern:"solid",collar:"#75AADB"}},
+  "co":{home:{primary:"#FCD116",secondary:"#003087",pattern:"solid",collar:"#CC0001"},away:{primary:"#003087",secondary:"#FCD116",pattern:"solid",collar:"#CC0001"}},
+  "cl":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"halves",collar:"#003087"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#003087"}},
+  "pe":{home:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"vstripes",collar:"#FFFFFF"},away:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"}},
+  "ec":{home:{primary:"#FFD100",secondary:"#003087",pattern:"solid",collar:"#CC0001"},away:{primary:"#003087",secondary:"#FFD100",pattern:"solid",collar:"#CC0001"}},
+  "py":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"hstripes",collar:"#003087"},away:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"}},
+  "bo":{home:{primary:"#009B3A",secondary:"#CC0001",pattern:"solid",collar:"#FFD100"},away:{primary:"#FFFFFF",secondary:"#009B3A",pattern:"solid",collar:"#CC0001"}},
+  "ve":{home:{primary:"#CF142B",secondary:"#003087",pattern:"solid",collar:"#CF142B"},away:{primary:"#003087",secondary:"#CF142B",pattern:"solid",collar:"#003087"}},
+  // NORTEAMÉRICA Y CARIBE
+  "mx":{home:{primary:"#006847",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#006847",pattern:"solid",collar:"#FFFFFF"}},
+  "us":{home:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#CC0001"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "ca":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "cr":{home:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "pa":{home:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "hn":{home:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#003087"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"}},
+  "sv":{home:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#003087"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#003087"}},
+  "gt":{home:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#003087"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"}},
+  "jm":{home:{primary:"#000000",secondary:"#FFD100",pattern:"solid",collar:"#009B3A"},away:{primary:"#009B3A",secondary:"#FFD100",pattern:"solid",collar:"#000000"}},
+  "tt":{home:{primary:"#CC0001",secondary:"#000000",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "cu":{home:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"}},
+  "ht":{home:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"}},
+  // EUROPA
+  "de":{home:{primary:"#FFFFFF",secondary:"#000000",pattern:"solid",collar:"#CC0001"},away:{primary:"#1A1A1A",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "fr":{home:{primary:"#003189",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#003189",pattern:"solid",collar:"#003189"}},
+  "es":{home:{primary:"#CC0001",secondary:"#FFD100",pattern:"solid",collar:"#CC0001"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#003087"}},
+  "it":{home:{primary:"#003189",secondary:"#FFFFFF",pattern:"solid",collar:"#003189"},away:{primary:"#FFFFFF",secondary:"#003189",pattern:"solid",collar:"#003189"}},
+  "gb":{home:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"}},
+  "pt":{home:{primary:"#CC0001",secondary:"#006600",pattern:"solid",collar:"#CC0001"},away:{primary:"#006600",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "nl":{home:{primary:"#FF6600",secondary:"#003087",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#FF6600",pattern:"solid",collar:"#FF6600"}},
+  "be":{home:{primary:"#CC0001",secondary:"#000000",pattern:"halves",collar:"#CC0001"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "hr":{home:{primary:"#CC1B28",secondary:"#FFFFFF",pattern:"checks",collar:"#003087"},away:{primary:"#003087",secondary:"#FFFFFF",pattern:"checks",collar:"#CC1B28"}},
+  "pl":{home:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"}},
+  "dk":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "se":{home:{primary:"#006AA7",secondary:"#FECC02",pattern:"solid",collar:"#FECC02"},away:{primary:"#FECC02",secondary:"#006AA7",pattern:"solid",collar:"#006AA7"}},
+  "no":{home:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "fi":{home:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"}},
+  "is":{home:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#003087"}},
+  "ch":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#1A1A1A",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "at":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "cz":{home:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#003087"}},
+  "sk":{home:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#CC0001"},away:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"}},
+  "hu":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"vstripes",collar:"#006600"},away:{primary:"#FFFFFF",secondary:"#006600",pattern:"solid",collar:"#CC0001"}},
+  "ro":{home:{primary:"#FFD100",secondary:"#003087",pattern:"solid",collar:"#CC0001"},away:{primary:"#003087",secondary:"#FFD100",pattern:"solid",collar:"#CC0001"}},
+  "gr":{home:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"}},
+  "tr":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "rs":{home:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#CC0001"}},
+  "ua":{home:{primary:"#FFD100",secondary:"#003087",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#FFD100",pattern:"solid",collar:"#FFD100"}},
+  "ru":{home:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"}},
+  "ie":{home:{primary:"#009A49",secondary:"#FFFFFF",pattern:"solid",collar:"#FF7900"},away:{primary:"#FFFFFF",secondary:"#009A49",pattern:"solid",collar:"#FF7900"}},
+  "mk":{home:{primary:"#CC0001",secondary:"#FFD100",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFD100",secondary:"#CC0001",pattern:"solid",collar:"#FFD100"}},
+  "ba":{home:{primary:"#003087",secondary:"#FFD100",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#003087"}},
+  "al":{home:{primary:"#CC0001",secondary:"#000000",pattern:"solid",collar:"#CC0001"},away:{primary:"#000000",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "by":{home:{primary:"#CC0001",secondary:"#006600",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#006600"}},
+  "ee":{home:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#000000"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#000000"}},
+  "lv":{home:{primary:"#9B1C31",secondary:"#FFFFFF",pattern:"hstripes",collar:"#9B1C31"},away:{primary:"#FFFFFF",secondary:"#9B1C31",pattern:"solid",collar:"#9B1C31"}},
+  "lt":{home:{primary:"#FFD100",secondary:"#006600",pattern:"solid",collar:"#CC0001"},away:{primary:"#003087",secondary:"#FFD100",pattern:"solid",collar:"#009A49"}},
+  "ge":{home:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"}},
+  "am":{home:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FF7900"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#FF7900"}},
+  "az":{home:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#009A49"},away:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#009A49"}},
+  "si":{home:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#006600"}},
+  "me":{home:{primary:"#CC0001",secondary:"#FFD100",pattern:"solid",collar:"#CC0001"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFD100"}},
+  "cy":{home:{primary:"#FFFFFF",secondary:"#CC6600",pattern:"solid",collar:"#009A49"},away:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"}},
+  "mt":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"halves",collar:"#CC0001"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "lu":{home:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#003087"}},
+  "ad":{home:{primary:"#003087",secondary:"#FECC02",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FECC02"}},
+  "li":{home:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#003087"}},
+  "sm":{home:{primary:"#003189",secondary:"#FFFFFF",pattern:"solid",collar:"#003189"},away:{primary:"#FFFFFF",secondary:"#003189",pattern:"solid",collar:"#003189"}},
+  "mc":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"hstripes",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  // ÁFRICA
+  "dz":{home:{primary:"#FFFFFF",secondary:"#006233",pattern:"halves",collar:"#CC0001"},away:{primary:"#006233",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"}},
+  "ng":{home:{primary:"#008751",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#008751",pattern:"solid",collar:"#008751"}},
+  "ma":{home:{primary:"#CC0001",secondary:"#006233",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#006233",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "sn":{home:{primary:"#FFFFFF",secondary:"#009B3A",pattern:"solid",collar:"#CC0001"},away:{primary:"#009B3A",secondary:"#FFFFFF",pattern:"solid",collar:"#FFD100"}},
+  "gh":{home:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#009B3A"},away:{primary:"#FFD100",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "eg":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#000000"}},
+  "tn":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "ci":{home:{primary:"#FF7900",secondary:"#009A49",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#009A49",secondary:"#FF7900",pattern:"solid",collar:"#FFFFFF"}},
+  "cm":{home:{primary:"#009B3A",secondary:"#CC0001",pattern:"solid",collar:"#FFD100"},away:{primary:"#CC0001",secondary:"#009B3A",pattern:"solid",collar:"#FFD100"}},
+  "za":{home:{primary:"#007A4D",secondary:"#FFB612",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFB612",secondary:"#007A4D",pattern:"solid",collar:"#007A4D"}},
+  "ml":{home:{primary:"#009A49",secondary:"#FFD100",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFD100",secondary:"#009A49",pattern:"solid",collar:"#CC0001"}},
+  "bf":{home:{primary:"#CC0001",secondary:"#009A49",pattern:"solid",collar:"#FFD100"},away:{primary:"#FFD100",secondary:"#CC0001",pattern:"solid",collar:"#009A49"}},
+  "gn":{home:{primary:"#CC0001",secondary:"#FFD100",pattern:"solid",collar:"#009A49"},away:{primary:"#009A49",secondary:"#CC0001",pattern:"solid",collar:"#FFD100"}},
+  "ke":{home:{primary:"#006600",secondary:"#CC0001",pattern:"solid",collar:"#000000"},away:{primary:"#FFFFFF",secondary:"#006600",pattern:"solid",collar:"#CC0001"}},
+  "tz":{home:{primary:"#009B3A",secondary:"#FFD100",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#009B3A",pattern:"solid",collar:"#FFD100"}},
+  "ao":{home:{primary:"#CC0001",secondary:"#000000",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#000000",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "zm":{home:{primary:"#009A49",secondary:"#FF6600",pattern:"solid",collar:"#000000"},away:{primary:"#FF6600",secondary:"#009A49",pattern:"solid",collar:"#000000"}},
+  "et":{home:{primary:"#009B3A",secondary:"#FFD100",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#009B3A",pattern:"solid",collar:"#FFD100"}},
+  "ga":{home:{primary:"#009B3A",secondary:"#FFD100",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#009B3A",pattern:"solid",collar:"#FFD100"}},
+  "rw":{home:{primary:"#009A49",secondary:"#FFD100",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#009A49",pattern:"solid",collar:"#FFD100"}},
+  "ug":{home:{primary:"#000000",secondary:"#FECC02",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#000000",pattern:"solid",collar:"#CC0001"}},
+  // ASIA
+  "jp":{home:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#003087"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "kr":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "cn":{home:{primary:"#CC0001",secondary:"#FFD100",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "sa":{home:{primary:"#006233",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#006233",pattern:"solid",collar:"#006233"}},
+  "ir":{home:{primary:"#FFFFFF",secondary:"#006233",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#006233"}},
+  "au":{home:{primary:"#FFD700",secondary:"#006233",pattern:"solid",collar:"#006233"},away:{primary:"#FFFFFF",secondary:"#006233",pattern:"solid",collar:"#FFD700"}},
+  "qa":{home:{primary:"#8D1B3D",secondary:"#FFFFFF",pattern:"solid",collar:"#8D1B3D"},away:{primary:"#FFFFFF",secondary:"#8D1B3D",pattern:"solid",collar:"#8D1B3D"}},
+  "ae":{home:{primary:"#FFFFFF",secondary:"#009B3A",pattern:"solid",collar:"#CC0001"},away:{primary:"#000000",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "in":{home:{primary:"#003087",secondary:"#FF7900",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FF7900",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"}},
+  "pk":{home:{primary:"#006233",secondary:"#FFFFFF",pattern:"solid",collar:"#006233"},away:{primary:"#FFFFFF",secondary:"#006233",pattern:"solid",collar:"#006233"}},
+  "id":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"}},
+  "th":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "vn":{home:{primary:"#CC0001",secondary:"#FFD100",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#003087"}},
+  "ph":{home:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#CC0001"}},
+  "my":{home:{primary:"#CC0001",secondary:"#FECC02",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#FECC02",pattern:"solid",collar:"#CC0001"}},
+  "iq":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#000000"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#000000"}},
+  "jo":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#009A49"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#000000"}},
+  "kz":{home:{primary:"#009B3A",secondary:"#FFD100",pattern:"solid",collar:"#009B3A"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#009B3A"}},
+  "uz":{home:{primary:"#009B3A",secondary:"#FFFFFF",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#009B3A",pattern:"solid",collar:"#FFFFFF"}},
+  "kw":{home:{primary:"#009B3A",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#CC0001"}},
+  "bh":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#CC0001"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#FFFFFF"}},
+  "om":{home:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#009B3A"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#006233"}},
+  "sy":{home:{primary:"#CC0001",secondary:"#000000",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#000000"}},
+  "lb":{home:{primary:"#FFFFFF",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"}},
+  "il":{home:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#003087"},away:{primary:"#003087",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"}},
+  "kp":{home:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#003087",pattern:"solid",collar:"#CC0001"}},
+  "bd":{home:{primary:"#006233",secondary:"#CC0001",pattern:"solid",collar:"#006233"},away:{primary:"#FFFFFF",secondary:"#006233",pattern:"solid",collar:"#CC0001"}},
+  "lk":{home:{primary:"#CC6600",secondary:"#003087",pattern:"solid",collar:"#009B3A"},away:{primary:"#003087",secondary:"#CC6600",pattern:"solid",collar:"#009B3A"}},
+  "mn":{home:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FFD100"},away:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#FFD100"}},
+  "af":{home:{primary:"#000000",secondary:"#CC0001",pattern:"solid",collar:"#009B3A"},away:{primary:"#FFFFFF",secondary:"#000000",pattern:"solid",collar:"#009B3A"}},
+  "np":{home:{primary:"#003087",secondary:"#CC0001",pattern:"solid",collar:"#CC0001"},away:{primary:"#CC0001",secondary:"#003087",pattern:"solid",collar:"#FFFFFF"}},
+  // OCEANÍA
+  "nz":{home:{primary:"#000000",secondary:"#FFFFFF",pattern:"solid",collar:"#FFFFFF"},away:{primary:"#FFFFFF",secondary:"#000000",pattern:"solid",collar:"#CC0001"}},
+  "fj":{home:{primary:"#69B3E7",secondary:"#FFFFFF",pattern:"solid",collar:"#003087"},away:{primary:"#FFFFFF",secondary:"#69B3E7",pattern:"solid",collar:"#69B3E7"}},
+  "pg":{home:{primary:"#000000",secondary:"#CC0001",pattern:"solid",collar:"#FFD100"},away:{primary:"#CC0001",secondary:"#000000",pattern:"solid",collar:"#FFD100"}},
+};
+
+// ─────────────────────────────────────────────────────
+//  Generador de SVG de camiseta de fútbol
+// ─────────────────────────────────────────────────────
+function makeJerseySVG(kit) {
+  const {primary, secondary, pattern, collar} = kit;
+  const collarColor = collar || primary;
+  const uid = Math.random().toString(36).slice(2, 8);
+
+  const bodyPath = "M22,8 C32,2 42,0 50,0 C58,0 68,2 78,8 L82,32 L85,108 L15,108 L18,32 Z";
+  const lSleeve  = "M22,8 L3,20 L7,33 L18,32 Z";
+  const rSleeve  = "M78,8 L97,20 L93,33 L82,32 Z";
+  const collarP  = "M43,0 L50,17 L57,0 C54,4 46,4 43,0 Z";
+  const outline  = "M22,8 L3,20 L7,33 L18,32 L15,108 L85,108 L82,32 L93,33 L97,20 L78,8 C68,2 58,0 50,0 C42,0 32,2 22,8 Z";
+
+  let defs = '';
+  let bodyFill = primary;
+
+  if (pattern === 'vstripes') {
+    defs = `<pattern id="p${uid}" x="0" y="0" width="8" height="10" patternUnits="userSpaceOnUse"><rect width="4" height="10" fill="${primary}"/><rect x="4" width="4" height="10" fill="${secondary}"/></pattern>`;
+    bodyFill = `url(#p${uid})`;
+  } else if (pattern === 'hstripes') {
+    defs = `<pattern id="p${uid}" x="0" y="0" width="100" height="8" patternUnits="userSpaceOnUse"><rect width="100" height="4" fill="${primary}"/><rect y="4" width="100" height="4" fill="${secondary}"/></pattern>`;
+    bodyFill = `url(#p${uid})`;
+  } else if (pattern === 'checks') {
+    defs = `<pattern id="p${uid}" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="${primary}"/><rect x="4" width="4" height="4" fill="${secondary}"/><rect y="4" width="4" height="4" fill="${secondary}"/><rect x="4" y="4" width="4" height="4" fill="${primary}"/></pattern>`;
+    bodyFill = `url(#p${uid})`;
+  } else if (pattern === 'halves') {
+    defs = `<linearGradient id="p${uid}" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="50%" stop-color="${primary}"/><stop offset="50%" stop-color="${secondary}"/></linearGradient>`;
+    bodyFill = `url(#p${uid})`;
+  } else if (pattern === 'diagonal') {
+    defs = `<linearGradient id="p${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="40%" stop-color="${primary}"/><stop offset="40%" stop-color="${secondary}"/></linearGradient>`;
+    bodyFill = `url(#p${uid})`;
+  }
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 112" width="68" height="76"><defs>${defs}</defs><path d="${bodyPath}" fill="${bodyFill}"/><path d="${lSleeve}" fill="${secondary}"/><path d="${rSleeve}" fill="${secondary}"/><path d="${outline}" fill="none" stroke="#2a2a2a" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="${collarP}" fill="${collarColor}" stroke="#2a2a2a" stroke-width="0.8"/></svg>`;
+}
+
+function showJerseys(alpha2) {
+  kitImages.innerHTML = '';
+  const kits = TEAM_KITS[alpha2];
+  if (!kits) {
+    kitStatus.textContent  = 'Sin datos de uniformes';
+    kitStatus.style.display= 'block';
+    return;
+  }
+  kitStatus.style.display = 'none';
+  const labels = ['Local', 'Visitante'];
+  [kits.home, kits.away].filter(Boolean).forEach((kit, i) => {
+    const item = document.createElement('div');
+    item.className = 'kit-item';
+    item.innerHTML = makeJerseySVG(kit);
+    const label = document.createElement('div');
+    label.className = 'kit-label';
+    label.textContent = labels[i];
+    item.appendChild(label);
+    kitImages.appendChild(item);
+  });
+}
+
+// ─────────────────────────────────────────────────────
+//  D3 setup
+// ─────────────────────────────────────────────────────
+const container = document.getElementById('map-container');
+const svg       = d3.select('#map');
+const g         = d3.select('#world-group');
+
+// ── Defs: filtro de relieve + viñeta ─────────────────
+svg.insert('defs', ':first-child').html(`
+  <!-- Relieve: ruido fractal + iluminación direccional -->
+  <filter id="relief" x="0%" y="0%" width="100%" height="100%"
+          color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.022 0.014"
+                  numOctaves="3" seed="9" result="noise"/>
+    <feDiffuseLighting in="noise" surfaceScale="2.4" diffuseConstant="0.5"
+                       lighting-color="#ffffff" result="lit">
+      <feDistantLight azimuth="310" elevation="52"/>
+    </feDiffuseLighting>
+    <feBlend in="SourceGraphic" in2="lit" mode="overlay" result="blended"/>
+    <feComposite in="blended" in2="SourceGraphic" operator="in"/>
+  </filter>
+  <!-- Viñeta: oscurece bordes del mapa -->
+  <radialGradient id="vignette-grad" cx="50%" cy="50%" r="70%"
+                  gradientUnits="objectBoundingBox">
+    <stop offset="15%" stop-color="rgba(0,0,0,0)" stop-opacity="0"/>
+    <stop offset="100%" stop-color="rgba(0,0,0,1)" stop-opacity="0.65"/>
+  </radialGradient>
+`);
+
+const W = () => container.clientWidth;
+const H = () => container.clientHeight;
+
+function makeProjection() {
+  return d3.geoNaturalEarth1().scale(W()/6.4).translate([W()/2, H()/2]);
+}
+let projection = makeProjection();
+let path       = d3.geoPath().projection(projection);
+
+const zoomBehavior = d3.zoom().scaleExtent([1,14])
+  .on('zoom', e => g.attr('transform', e.transform));
+svg.call(zoomBehavior);
+svg.on('dblclick.zoom', null);
+
+// ─────────────────────────────────────────────────────
+//  Tooltip
+// ─────────────────────────────────────────────────────
+const tooltip = document.getElementById('tooltip');
+
+function showTooltip(evt, text) {
+  tooltip.textContent = text;
+  tooltip.style.display = 'block';
+  moveTooltip(evt);
+}
+function moveTooltip(evt) {
+  const e = evt.touches ? evt.touches[0] : evt;
+  const r = container.getBoundingClientRect();
+  let x = e.clientX - r.left + 14;
+  let y = e.clientY - r.top  - 32;
+  if (x + 160 > W()) x -= 180;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top  = y + 'px';
+}
+function hideTooltip() { tooltip.style.display = 'none'; }
+
+// ─────────────────────────────────────────────────────
+//  Text-to-Speech
+// ─────────────────────────────────────────────────────
+const synth    = window.speechSynthesis;
+const speakBtn = document.getElementById('speak-btn');
+const speakIcon= document.getElementById('speak-icon');
+let lastSpokenName = '';
+let spanishVoice   = null;
+
+function loadVoices() {
+  const preferred = ['es-ES','es-MX','es-AR','es-US','es'];
+  for (const lang of preferred) {
+    const v = synth.getVoices().find(v => v.lang.startsWith(lang));
+    if (v) { spanishVoice = v; break; }
+  }
+}
+loadVoices();
+if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
+
+function speakName(name) {
+  if (!synth) return;
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(name);
+  u.lang = 'es-ES'; u.rate = 0.88; u.pitch = 1.05;
+  if (spanishVoice) u.voice = spanishVoice;
+  speakBtn.classList.add('speaking');
+  u.onend = u.onerror = () => speakBtn.classList.remove('speaking');
+  synth.speak(u);
+}
+speakBtn.addEventListener('click', () => { if (lastSpokenName) speakName(lastSpokenName); });
+
+// ─────────────────────────────────────────────────────
+//  Botón de idioma oficial
+// ─────────────────────────────────────────────────────
+const langBtn  = document.getElementById('lang-btn');
+const langIcon = document.getElementById('lang-icon');
+const langNameEl = document.getElementById('lang-name');
+let lastLanguageText = '';
+
+function speakLanguage(lang) {
+  if (!synth || !lang) return;
+  synth.cancel();
+  const hasMultiple = lang.includes(' y ') || lang.includes(',');
+  const phrase = hasMultiple
+    ? `Los idiomas oficiales son: ${lang}`
+    : `El idioma oficial es el ${lang}`;
+  const u = new SpeechSynthesisUtterance(phrase);
+  u.lang = 'es-ES'; u.rate = 0.88; u.pitch = 1.05;
+  if (spanishVoice) u.voice = spanishVoice;
+  langBtn.classList.add('speaking');
+  u.onend = u.onerror = () => langBtn.classList.remove('speaking');
+  synth.speak(u);
+}
+langBtn.addEventListener('click', () => { if (lastLanguageText) speakLanguage(lastLanguageText); });
+
+// ─────────────────────────────────────────────────────
+//  Info panel
+// ─────────────────────────────────────────────────────
+const flagWrapper     = document.getElementById('flag-wrapper');
+const flagImg         = document.getElementById('flag-img');
+const countryNameEl   = document.getElementById('country-name');
+const placeholderIcon = document.querySelector('.placeholder-icon');
+const placeholderText = document.querySelector('.placeholder-text');
+const kitSection      = document.getElementById('kit-section');
+const kitStatus       = document.getElementById('kit-status');
+const kitImages       = document.getElementById('kit-images');
+
+function selectCountry(alpha2, name) {
+  placeholderIcon.style.display = 'none';
+  placeholderText.style.display = 'none';
+
+  flagImg.src = `https://flagcdn.com/w320/${alpha2}.png`;
+  flagImg.alt = `Bandera de ${name}`;
+  flagImg.onerror = () => {
+    flagImg.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="320" height="213"><rect width="320" height="213" fill="%23ccc"/><text x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="40">🏳️</text></svg>';
+  };
+  flagWrapper.style.display  = 'block';
+  countryNameEl.style.display= 'block';
+  speakBtn.style.display     = 'flex';
+  countryNameEl.textContent  = name;
+  lastSpokenName = name;
+  speakName(name);
+
+  // Idioma oficial
+  const lang = LANGUAGES[alpha2] || null;
+  lastLanguageText = lang || '';
+  if (lang) {
+    langBtn.style.display   = 'flex';
+    langNameEl.style.display= 'block';
+    langNameEl.textContent  = lang;
+  } else {
+    langBtn.style.display   = 'none';
+    langNameEl.style.display= 'none';
+  }
+
+  // Mostrar sección de kits
+  kitSection.style.display = 'flex';
+  kitStatus.style.display  = 'none';
+  kitImages.innerHTML      = '';
+  showJerseys(alpha2);
+}
+
+// ─────────────────────────────────────────────────────
+//  Cargar mapa
+// ─────────────────────────────────────────────────────
+let selectedEl = null;
+
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+  .then(r => r.json())
+  .then(world => {
+    document.getElementById('loading').style.display = 'none';
+    const features = topojson.feature(world, world.objects.countries).features;
+    const borders  = topojson.mesh(world, world.objects.countries, (a,b) => a !== b);
+
+    g.append('path').datum({type:'Sphere'}).attr('d', path).attr('fill','#07111e');
+    g.append('path').datum(d3.geoGraticule()()).attr('class','graticule').attr('d', path);
+
+    // Grupo de países con filtro de relieve
+    const cg = g.append('g').attr('filter', 'url(#relief)');
+    cg.selectAll('.country').data(features).join('path')
+      .attr('class', 'country')
+      .attr('d', path)
+      .style('fill', d => {
+        const a2 = NUM_TO_A2[+d.id];
+        return a2 ? getContinentColor(a2).base : CONTINENT_DEFAULT.base;
+      })
+      .on('pointerover', function(evt, d) {
+        const a2 = NUM_TO_A2[+d.id];
+        const nm = a2 ? (NAMES[a2] || a2.toUpperCase()) : null;
+        if (nm && this !== selectedEl) {
+          showTooltip(evt, nm);
+          d3.select(this).style('fill', getContinentColor(a2).hover);
+        }
+      })
+      .on('pointermove', function(evt) { if (this !== selectedEl) moveTooltip(evt); })
+      .on('pointerout', function(evt, d) {
+        hideTooltip();
+        if (this !== selectedEl) {
+          const a2 = NUM_TO_A2[+d.id];
+          const col = a2 ? getContinentColor(a2) : CONTINENT_DEFAULT;
+          d3.select(this).style('fill', col.base);
+        }
+      })
+      .on('click', function(evt, d) {
+        evt.stopPropagation();
+        hideTooltip();
+        const a2 = NUM_TO_A2[+d.id];
+        const nm = a2 ? (NAMES[a2] || a2.toUpperCase()) : null;
+        if (!a2) return;
+        // Restaurar color del anterior seleccionado
+        if (selectedEl) {
+          const prevA2 = NUM_TO_A2[+d3.select(selectedEl).datum().id];
+          d3.select(selectedEl)
+            .classed('selected', false)
+            .style('fill', prevA2 ? getContinentColor(prevA2).base : CONTINENT_DEFAULT.base);
+        }
+        d3.select(this).classed('selected', true).style('fill', getContinentColor(a2).sel);
+        selectedEl = this;
+        selectCountry(a2, nm);
+      });
+
+    g.append('path').datum(borders).attr('class','borders').attr('d', path);
+
+    // Viñeta fija encima del mapa (fuera del grupo de zoom)
+    svg.append('rect')
+      .attr('width', '100%').attr('height', '100%')
+      .attr('fill', 'url(#vignette-grad)')
+      .attr('pointer-events', 'none');
+  })
+  .catch(() => {
+    document.getElementById('loading').innerHTML =
+      '<p style="color:#c00">Error al cargar el mapa.</p>';
+  });
+
+// ─────────────────────────────────────────────────────
+//  Pantalla completa
+// ─────────────────────────────────────────────────────
+const btnFs = document.getElementById('btn-fs');
+function toggleFullscreen() {
+  const el = document.documentElement;
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  if (!isFs) (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+  else       (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+}
+btnFs.addEventListener('click', toggleFullscreen);
+function onFsChange() {
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  btnFs.textContent = isFs ? '✕' : '⛶';
+  btnFs.title = isFs ? 'Salir de pantalla completa' : 'Pantalla completa';
+}
+document.addEventListener('fullscreenchange',       onFsChange);
+document.addEventListener('webkitfullscreenchange', onFsChange);
+
+// ─────────────────────────────────────────────────────
+//  Zoom buttons
+// ─────────────────────────────────────────────────────
+document.getElementById('btn-in') .addEventListener('click', () => svg.transition().duration(280).call(zoomBehavior.scaleBy, 1.6));
+document.getElementById('btn-out').addEventListener('click', () => svg.transition().duration(280).call(zoomBehavior.scaleBy, 0.625));
+document.getElementById('btn-rst').addEventListener('click', () => svg.transition().duration(480).call(zoomBehavior.transform, d3.zoomIdentity));
+
+// ─────────────────────────────────────────────────────
+//  Resize
+// ─────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  projection = makeProjection();
+  path = d3.geoPath().projection(projection);
+  g.selectAll('path').attr('d', path);
+});
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Mapamundi Interactivo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #070b14;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #0d1117;
+      color: #7ec8f5;
+      padding: 14px 24px;
+      text-align: center;
+      font-size: 1.35rem;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #1e3a5f;
+      box-shadow: 0 2px 20px rgba(74,158,255,0.15);
+      user-select: none;
+      flex-shrink: 0;
+    }
+    header span { font-size: 1.5rem; margin-right: 8px; }
+
+    /* ── MAP ─────────────────────────────────────────── */
+    #map-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    svg#map {
+      width: 100%;
+      height: 100%;
+      background: #07111e;
+      display: block;
+      cursor: grab;
+    }
+    svg#map:active { cursor: grabbing; }
+
+    .graticule { fill: none; stroke: rgba(74,158,255,0.10); stroke-width: 0.5; }
+
+    .country {
+      stroke: rgba(0,0,0,0.55);
+      stroke-width: 0.35;
+      cursor: pointer;
+      transition: fill 0.18s;
+    }
+    .country.selected { stroke: #00d4ff; stroke-width: 1.2; filter: brightness(1.5); }
+
+    .borders { fill: none; stroke: rgba(0,0,0,0.4); stroke-width: 0.5; pointer-events: none; }
+
+    /* ── PANEL flotante dark ─────────────────────────── */
+    #info-panel {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 215px;
+      background: rgba(7,17,30,0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid #1e3a5f;
+      border-radius: 14px;
+      box-shadow: 0 0 24px rgba(74,158,255,0.12), 0 6px 24px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 14px 16px;
+      gap: 12px;
+      z-index: 10;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+    #info-panel::-webkit-scrollbar { width: 4px; }
+    #info-panel::-webkit-scrollbar-thumb { background: rgba(74,158,255,0.25); border-radius: 4px; }
+
+    .placeholder-icon { font-size: 2.4rem; opacity: 0.3; }
+    .placeholder-text { color: #3a6a9a; font-size: 0.9rem; text-align: center; line-height: 1.55; }
+
+    #flag-wrapper {
+      width: 187px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.6), 0 0 12px rgba(74,158,255,0.15);
+      border: 1px solid #1e3a5f;
+      display: none;
+    }
+    #flag-img { width: 100%; display: block; }
+
+    #country-name {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #7ec8f5;
+      text-align: center;
+      line-height: 1.3;
+      display: none;
+      text-shadow: 0 0 12px rgba(74,158,255,0.4);
+    }
+
+    /* ── BOTONES HABLAR ──────────────────────────────── */
+    #speak-btn, #lang-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+      width: 100%;
+      letter-spacing: 0.5px;
+    }
+    #speak-btn {
+      background: transparent;
+      color: #4a9eff;
+      border: 1px solid #1e3a5f;
+      box-shadow: 0 0 8px rgba(74,158,255,0.1);
+    }
+    #speak-btn:hover { background: rgba(74,158,255,0.1); box-shadow: 0 0 14px rgba(74,158,255,0.3); }
+    #speak-btn:active { transform: scale(0.97); }
+    #speak-btn.speaking {
+      color: #ff6b35;
+      border-color: #ff6b35;
+      animation: pulse-btn 0.6s ease-in-out infinite alternate;
+    }
+    #lang-btn {
+      background: transparent;
+      color: #34d399;
+      border: 1px solid #0d3d2a;
+      box-shadow: 0 0 8px rgba(52,211,153,0.1);
+    }
+    #lang-btn:hover { background: rgba(52,211,153,0.1); box-shadow: 0 0 14px rgba(52,211,153,0.3); }
+    #lang-btn:active { transform: scale(0.97); }
+    #lang-btn.speaking {
+      color: #ff6b35;
+      border-color: #ff6b35;
+      animation: pulse-btn 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-btn {
+      from { box-shadow: 0 0 6px rgba(255,107,53,0.3); }
+      to   { box-shadow: 0 0 18px rgba(255,107,53,0.7); }
+    }
+    #speak-icon, #lang-icon { font-size: 1.1rem; }
+    #lang-name {
+      display: none;
+      font-size: 0.78rem;
+      color: #34d399;
+      text-align: center;
+      font-style: italic;
+      margin-top: -6px;
+      opacity: 0.85;
+    }
+
+    /* ── SECCIÓN UNIFORMES ───────────────────────────── */
+    #kit-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      gap: 8px;
+      border-top: 1px solid #1e3a5f;
+      padding-top: 10px;
+    }
+
+    .kit-header {
+      font-size: 0.72rem;
+      font-weight: bold;
+      color: #3a6a9a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .kit-loading {
+      font-size: 0.78rem;
+      color: #3a6a9a;
+      font-style: italic;
+    }
+
+    #kit-images {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .kit-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .kit-item img, .kit-item svg {
+      height: 78px;
+      width: auto;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+      transition: transform 0.15s;
+    }
+    .kit-item img:hover, .kit-item svg:hover { transform: scale(1.08); }
+
+    .kit-label {
+      font-size: 0.62rem;
+      color: #3a6a9a;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* ── CONTROLES ───────────────────────────────────── */
+    #zoom-controls {
+      position: absolute;
+      bottom: 20px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .zoom-btn {
+      width: 48px;
+      height: 48px;
+      background: rgba(7,17,30,0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(74,158,255,0.1);
+      user-select: none;
+      color: #4a9eff;
+      transition: all 0.15s;
+    }
+    .zoom-btn:hover { background: rgba(74,158,255,0.12); box-shadow: 0 0 14px rgba(74,158,255,0.25); }
+    .zoom-btn:active { transform: scale(0.94); }
+
+    /* ── TOOLTIP ─────────────────────────────────────── */
+    #tooltip {
+      position: absolute;
+      background: rgba(7,17,30,0.9);
+      color: #7ec8f5;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      pointer-events: none;
+      display: none;
+      white-space: nowrap;
+      z-index: 20;
+      border: 1px solid #1e3a5f;
+      box-shadow: 0 0 10px rgba(74,158,255,0.15);
+    }
+
+    /* ── LOADING ─────────────────────────────────────── */
+    #loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(7,17,30,0.95);
+      gap: 14px;
+      z-index: 30;
+    }
+    .spinner {
+      width: 42px; height: 42px;
+      border: 3px solid #1e3a5f;
+      border-top-color: #4a9eff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading p { color: #3a6a9a; font-size: 1rem; letter-spacing: 1px; }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 600px) {
+      #info-panel {
+        top: auto; bottom: 16px;
+        right: 50%; transform: translateX(50%);
+        width: calc(100% - 32px); max-width: 380px;
+        flex-direction: row; flex-wrap: wrap;
+        justify-content: center; padding: 12px;
+        max-height: 200px;
+      }
+      #flag-wrapper { width: 80px; }
+      #country-name { font-size: 0.95rem; }
+      #zoom-controls { bottom: 215px; }
+      .kit-item img, .kit-item svg { height: 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<header><span>🌍</span>Mapamundi Interactivo</header>
+
+<div id="map-container">
+  <svg id="map"><g id="world-group"></g></svg>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Cargando mapa del mundo…</p>
+  </div>
+
+  <div id="tooltip"></div>
+
+  <!-- Panel semitransparente flotante -->
+  <div id="info-panel">
+    <div class="placeholder-icon">👆</div>
+    <div class="placeholder-text">Tocá un país<br>en el mapa para<br>ver su bandera</div>
+    <div id="flag-wrapper"><img id="flag-img" alt="Bandera"></div>
+    <div id="country-name"></div>
+    <button id="speak-btn" title="Escuchar nombre del país">
+      <span id="speak-icon">🔊</span>
+      <span>Escuchar</span>
+    </button>
+    <button id="lang-btn" title="Idioma oficial">
+      <span id="lang-icon">🗣️</span>
+      <span>Idioma oficial</span>
+    </button>
+    <div id="lang-name"></div>
+    <!-- Sección de uniformes -->
+    <div id="kit-section">
+      <div class="kit-header">⚽ Uniformes de Fútbol</div>
+      <div id="kit-status" class="kit-loading">Buscando uniformes…</div>
+      <div id="kit-images"></div>
+    </div>
+  </div>
+
+  <!-- Controles de zoom -->
+  <div id="zoom-controls">
+    <button class="zoom-btn" id="btn-fs"  title="Pantalla completa" style="font-size:1.1rem">⛶</button>
+    <button class="zoom-btn" id="btn-in"  title="Acercar">＋</button>
+    <button class="zoom-btn" id="btn-out" title="Alejar">－</button>
+    <button class="zoom-btn" id="btn-rst" title="Restablecer" style="font-size:1rem">⌂</button>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────
+//  ISO-3166 numeric  →  alpha-2
+// ─────────────────────────────────────────────────────
+const NUM_TO_A2 = {
+  4:"af",8:"al",12:"dz",20:"ad",24:"ao",28:"ag",32:"ar",36:"au",40:"at",
+  44:"bs",48:"bh",50:"bd",52:"bb",56:"be",84:"bz",204:"bj",64:"bt",
+  68:"bo",70:"ba",72:"bw",76:"br",96:"bn",100:"bg",104:"mm",108:"bi",
+  112:"by",116:"kh",120:"cm",124:"ca",132:"cv",140:"cf",144:"lk",148:"td",
+  152:"cl",156:"cn",170:"co",174:"km",178:"cg",180:"cd",188:"cr",191:"hr",
+  192:"cu",196:"cy",203:"cz",208:"dk",262:"dj",212:"dm",214:"do",218:"ec",
+  818:"eg",222:"sv",226:"gq",232:"er",233:"ee",231:"et",242:"fj",246:"fi",
+  250:"fr",266:"ga",270:"gm",268:"ge",276:"de",288:"gh",308:"gd",300:"gr",
+  320:"gt",324:"gn",624:"gw",328:"gy",332:"ht",340:"hn",348:"hu",352:"is",
+  356:"in",360:"id",364:"ir",368:"iq",372:"ie",376:"il",380:"it",384:"ci",
+  388:"jm",392:"jp",400:"jo",398:"kz",404:"ke",296:"ki",408:"kp",410:"kr",
+  414:"kw",417:"kg",418:"la",422:"lb",426:"ls",430:"lr",434:"ly",438:"li",
+  440:"lt",442:"lu",807:"mk",450:"mg",454:"mw",458:"my",462:"mv",466:"ml",
+  470:"mt",584:"mh",478:"mr",480:"mu",484:"mx",583:"fm",498:"md",492:"mc",
+  496:"mn",499:"me",504:"ma",508:"mz",516:"na",520:"nr",524:"np",528:"nl",
+  554:"nz",558:"ni",562:"ne",566:"ng",578:"no",512:"om",586:"pk",585:"pw",
+  275:"ps",591:"pa",598:"pg",600:"py",604:"pe",608:"ph",616:"pl",620:"pt",
+  634:"qa",642:"ro",643:"ru",646:"rw",659:"kn",662:"lc",670:"vc",882:"ws",
+  674:"sm",678:"st",682:"sa",686:"sn",688:"rs",694:"sl",706:"so",705:"si",
+  703:"sk",90:"sb",710:"za",716:"zw",724:"es",728:"ss",729:"sd",740:"sr",
+  748:"sz",752:"se",756:"ch",760:"sy",762:"tj",834:"tz",764:"th",626:"tl",
+  768:"tg",776:"to",780:"tt",788:"tn",792:"tr",795:"tm",798:"tv",800:"ug",
+  804:"ua",784:"ae",826:"gb",840:"us",858:"uy",860:"uz",548:"vu",336:"va",
+  862:"ve",704:"vn",887:"ye",894:"zm",51:"am",31:"az",238:"fk",540:"nc",854:"bf"
+};
+
+// ─────────────────────────────────────────────────────
+//  alpha-2  →  nombre en español
+// ─────────────────────────────────────────────────────
+const NAMES = {
+  "af":"Afganistán","al":"Albania","dz":"Argelia","ad":"Andorra","ao":"Angola",
+  "ag":"Antigua y Barbuda","ar":"Argentina","au":"Australia","at":"Austria",
+  "bs":"Bahamas","bh":"Baréin","bd":"Bangladés","bb":"Barbados","be":"Bélgica",
+  "bz":"Belice","bj":"Benín","bt":"Bután","bo":"Bolivia",
+  "ba":"Bosnia y Herzegovina","bw":"Botsuana","br":"Brasil","bn":"Brunéi",
+  "bg":"Bulgaria","bf":"Burkina Faso","bi":"Burundi","cv":"Cabo Verde",
+  "kh":"Camboya","cm":"Camerún","ca":"Canadá","cf":"Rep. Centroafricana",
+  "td":"Chad","cl":"Chile","cn":"China","cy":"Chipre","co":"Colombia",
+  "km":"Comoras","cg":"Congo","cd":"Congo (RD)","cr":"Costa Rica",
+  "ci":"Costa de Marfil","hr":"Croacia","cu":"Cuba","cz":"Rep. Checa",
+  "dk":"Dinamarca","dj":"Yibuti","dm":"Dominica","do":"Rep. Dominicana",
+  "ec":"Ecuador","eg":"Egipto","sv":"El Salvador","ae":"Emiratos Árabes",
+  "er":"Eritrea","sk":"Eslovaquia","si":"Eslovenia","es":"España",
+  "us":"Estados Unidos","ee":"Estonia","et":"Etiopía","ph":"Filipinas",
+  "fi":"Finlandia","fj":"Fiyi","fr":"Francia","ga":"Gabón","gm":"Gambia",
+  "ge":"Georgia","gh":"Ghana","gd":"Granada","gr":"Grecia","gt":"Guatemala",
+  "gn":"Guinea","gq":"Guinea Ecuatorial","gw":"Guinea-Bisáu","gy":"Guyana",
+  "ht":"Haití","hn":"Honduras","hu":"Hungría","in":"India","id":"Indonesia",
+  "iq":"Irak","ir":"Irán","ie":"Irlanda","is":"Islandia","il":"Israel",
+  "it":"Italia","jm":"Jamaica","jp":"Japón","jo":"Jordania","kz":"Kazajistán",
+  "ke":"Kenia","kg":"Kirguistán","ki":"Kiribati","kw":"Kuwait","la":"Laos",
+  "ls":"Lesoto","lv":"Letonia","lb":"Líbano","lr":"Liberia","ly":"Libia",
+  "li":"Liechtenstein","lt":"Lituania","lu":"Luxemburgo",
+  "mk":"Macedonia del Norte","mg":"Madagascar","my":"Malasia","mw":"Malaui",
+  "mv":"Maldivas","ml":"Malí","mt":"Malta","ma":"Marruecos","mr":"Mauritania",
+  "mu":"Mauricio","mx":"México","mc":"Mónaco","mn":"Mongolia","me":"Montenegro",
+  "mz":"Mozambique","mm":"Myanmar","na":"Namibia","nr":"Nauru","np":"Nepal",
+  "ni":"Nicaragua","ne":"Níger","ng":"Nigeria","kp":"Corea del Norte",
+  "no":"Noruega","nz":"Nueva Zelanda","om":"Omán","nl":"Holanda",
+  "pk":"Pakistán","pw":"Palaos","ps":"Palestina","pa":"Panamá",
+  "pg":"Papúa Nueva Guinea","py":"Paraguay","pe":"Perú","pl":"Polonia",
+  "pt":"Portugal","qa":"Catar","gb":"Reino Unido","ro":"Rumanía","ru":"Rusia",
+  "rw":"Ruanda","kn":"San Cristóbal y Nieves","sm":"San Marino",
+  "vc":"San Vicente y Granadinas","lc":"Santa Lucía",
+  "st":"Santo Tomé y Príncipe","sn":"Senegal","rs":"Serbia",
+  "sl":"Sierra Leona","sb":"Islas Salomón","so":"Somalia","lk":"Sri Lanka",
+  "sz":"Suazilandia","za":"Sudáfrica","ss":"Sudán del Sur","sd":"Sudán",
+  "se":"Suecia","ch":"Suiza","sr":"Surinam","sy":"Siria","tj":"Tayikistán",
+  "tz":"Tanzania","th":"Tailandia","tl":"Timor Oriental","tg":"Togo",
+  "to":"Tonga","tt":"Trinidad y Tobago","tn":"Túnez","tm":"Turkmenistán",
+  "tr":"Turquía","tv":"Tuvalu","ua":"Ucrania","ug":"Uganda","uy":"Uruguay",
+  "uz":"Uzbekistán","vu":"Vanuatu","va":"Ciudad del Vaticano",
+  "ve":"Venezuela","vn":"Vietnam","ws":"Samoa","ye":"Yemen","zm":"Zambia",
+  "zw":"Zimbabue","by":"Bielorrusia","am":"Armenia","az":"Azerbaiyán",
+  "fk":"Islas Malvinas","nc":"Nueva Caledonia","kr":"Corea del Sur",
+  "mh":"Islas Marshall","fm":"Micronesia","md":"Moldavia",
+  "de":"Alemania","sa":"Arabia Saudita"
+};
+
+// ─────────────────────────────────────────────────────
+//  alpha-2  →  continente  (para colores del mapa)
+// ─────────────────────────────────────────────────────
+const A2_CONTINENT = {
+  // Europa
+  al:"eu",ad:"eu",at:"eu",by:"eu",be:"eu",ba:"eu",bg:"eu",hr:"eu",cy:"eu",
+  cz:"eu",dk:"eu",ee:"eu",fi:"eu",fr:"eu",de:"eu",gr:"eu",hu:"eu",is:"eu",
+  ie:"eu",it:"eu",lv:"eu",li:"eu",lt:"eu",lu:"eu",mk:"eu",mt:"eu",md:"eu",
+  mc:"eu",me:"eu",nl:"eu",no:"eu",pl:"eu",pt:"eu",ro:"eu",ru:"eu",sm:"eu",
+  rs:"eu",sk:"eu",si:"eu",es:"eu",se:"eu",ch:"eu",ua:"eu",gb:"eu",va:"eu",
+  am:"eu",az:"eu",ge:"eu",
+  // África
+  dz:"af",ao:"af",bj:"af",bw:"af",bf:"af",bi:"af",cv:"af",cm:"af",cf:"af",
+  td:"af",km:"af",cg:"af",cd:"af",ci:"af",dj:"af",eg:"af",gq:"af",er:"af",
+  et:"af",ga:"af",gm:"af",gh:"af",gn:"af",gw:"af",ke:"af",ls:"af",lr:"af",
+  ly:"af",mg:"af",mw:"af",ml:"af",mr:"af",mu:"af",ma:"af",mz:"af",na:"af",
+  ne:"af",ng:"af",rw:"af",st:"af",sn:"af",sl:"af",so:"af",za:"af",ss:"af",
+  sd:"af",sz:"af",tz:"af",tg:"af",tn:"af",ug:"af",zm:"af",zw:"af",
+  // Asia
+  af:"as",bh:"as",bd:"as",bt:"as",bn:"as",kh:"as",cn:"as",in:"as",id:"as",
+  ir:"as",iq:"as",il:"as",jp:"as",jo:"as",kz:"as",kw:"as",kg:"as",la:"as",
+  lb:"as",my:"as",mv:"as",mn:"as",mm:"as",np:"as",kp:"as",om:"as",pk:"as",
+  ps:"as",ph:"as",qa:"as",sa:"as",lk:"as",sy:"as",tj:"as",th:"as",tl:"as",
   tm:"as",ae:"as",uz:"as",vn:"as",ye:"as",kr:"as",
   // Norteamérica y Caribe
   ag:"na",bs:"na",bb:"na",bz:"na",ca:"na",cr:"na",cu:"na",dm:"na",do:"na",
