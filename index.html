@@ -11,7 +11,7 @@
 
     body {
       font-family: 'Georgia', 'Times New Roman', serif;
-      background: #e8f4f8;
+      background: #070b14;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
@@ -20,15 +20,16 @@
     }
 
     header {
-      background: linear-gradient(135deg, #1a4a7a 0%, #2c6fad 100%);
-      color: white;
+      background: #0d1117;
+      color: #7ec8f5;
       padding: 14px 24px;
       text-align: center;
       font-size: 1.35rem;
       font-weight: bold;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      border-bottom: 1px solid #1e3a5f;
+      box-shadow: 0 2px 20px rgba(74,158,255,0.15);
       user-select: none;
       flex-shrink: 0;
     }
@@ -44,38 +45,36 @@
     svg#map {
       width: 100%;
       height: 100%;
-      background: #b8ddf0;
+      background: #07111e;
       display: block;
       cursor: grab;
     }
     svg#map:active { cursor: grabbing; }
 
-    .graticule { fill: none; stroke: rgba(255,255,255,0.28); stroke-width: 0.4; }
+    .graticule { fill: none; stroke: rgba(74,158,255,0.10); stroke-width: 0.5; }
 
     .country {
-      fill: #c9dea8;
-      stroke: #7a9a60;
-      stroke-width: 0.4;
+      stroke: rgba(0,0,0,0.55);
+      stroke-width: 0.35;
       cursor: pointer;
-      transition: fill 0.15s;
+      transition: fill 0.18s;
     }
-    .country:hover { fill: #a8c97e; }
-    .country.selected { fill: #f4a340; stroke: #b86800; stroke-width: 1; }
+    .country.selected { stroke: #00d4ff; stroke-width: 1.2; filter: brightness(1.5); }
 
-    .borders { fill: none; stroke: #5a7a45; stroke-width: 0.6; pointer-events: none; }
+    .borders { fill: none; stroke: rgba(0,0,0,0.4); stroke-width: 0.5; pointer-events: none; }
 
-    /* ── PANEL flotante semitransparente ─────────────── */
+    /* ── PANEL flotante dark ─────────────────────────── */
     #info-panel {
       position: absolute;
       top: 16px;
       right: 16px;
       width: 215px;
-      background: rgba(255,255,255,0.45);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1.5px solid rgba(255,255,255,0.65);
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+      background: rgba(7,17,30,0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid #1e3a5f;
+      border-radius: 14px;
+      box-shadow: 0 0 24px rgba(74,158,255,0.12), 0 6px 24px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -86,17 +85,17 @@
       overflow-y: auto;
     }
     #info-panel::-webkit-scrollbar { width: 4px; }
-    #info-panel::-webkit-scrollbar-thumb { background: rgba(44,111,173,0.3); border-radius: 4px; }
+    #info-panel::-webkit-scrollbar-thumb { background: rgba(74,158,255,0.25); border-radius: 4px; }
 
-    .placeholder-icon { font-size: 2.4rem; opacity: 0.45; }
-    .placeholder-text { color: #4a6a8a; font-size: 0.9rem; text-align: center; line-height: 1.55; }
+    .placeholder-icon { font-size: 2.4rem; opacity: 0.3; }
+    .placeholder-text { color: #3a6a9a; font-size: 0.9rem; text-align: center; line-height: 1.55; }
 
     #flag-wrapper {
       width: 187px;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 3px 14px rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 3px 16px rgba(0,0,0,0.6), 0 0 12px rgba(74,158,255,0.15);
+      border: 1px solid #1e3a5f;
       display: none;
     }
     #flag-img { width: 100%; display: block; }
@@ -104,11 +103,11 @@
     #country-name {
       font-size: 1.15rem;
       font-weight: bold;
-      color: #1a3a5c;
+      color: #7ec8f5;
       text-align: center;
       line-height: 1.3;
       display: none;
-      text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+      text-shadow: 0 0 12px rgba(74,158,255,0.4);
     }
 
     /* ── BOTONES HABLAR ──────────────────────────────── */
@@ -117,46 +116,54 @@
       align-items: center;
       justify-content: center;
       gap: 7px;
-      color: white;
-      border: none;
-      border-radius: 24px;
+      border-radius: 8px;
       padding: 9px 16px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      transition: all 0.15s;
       user-select: none;
       width: 100%;
+      letter-spacing: 0.5px;
     }
     #speak-btn {
-      background: rgba(44,111,173,0.82);
-      box-shadow: 0 2px 8px rgba(44,111,173,0.3);
+      background: transparent;
+      color: #4a9eff;
+      border: 1px solid #1e3a5f;
+      box-shadow: 0 0 8px rgba(74,158,255,0.1);
     }
-    #speak-btn:active { background: rgba(26,74,122,0.9); transform: scale(0.97); }
+    #speak-btn:hover { background: rgba(74,158,255,0.1); box-shadow: 0 0 14px rgba(74,158,255,0.3); }
+    #speak-btn:active { transform: scale(0.97); }
     #speak-btn.speaking {
-      background: rgba(224,90,0,0.85);
+      color: #ff6b35;
+      border-color: #ff6b35;
       animation: pulse-btn 0.6s ease-in-out infinite alternate;
     }
     #lang-btn {
-      background: rgba(22,140,80,0.82);
-      box-shadow: 0 2px 8px rgba(22,140,80,0.3);
+      background: transparent;
+      color: #34d399;
+      border: 1px solid #0d3d2a;
+      box-shadow: 0 0 8px rgba(52,211,153,0.1);
     }
-    #lang-btn:active { background: rgba(14,100,55,0.9); transform: scale(0.97); }
+    #lang-btn:hover { background: rgba(52,211,153,0.1); box-shadow: 0 0 14px rgba(52,211,153,0.3); }
+    #lang-btn:active { transform: scale(0.97); }
     #lang-btn.speaking {
-      background: rgba(224,90,0,0.85);
+      color: #ff6b35;
+      border-color: #ff6b35;
       animation: pulse-btn 0.6s ease-in-out infinite alternate;
     }
     @keyframes pulse-btn {
-      from { box-shadow: 0 2px 8px rgba(224,90,0,0.3); }
-      to   { box-shadow: 0 4px 18px rgba(224,90,0,0.7); }
+      from { box-shadow: 0 0 6px rgba(255,107,53,0.3); }
+      to   { box-shadow: 0 0 18px rgba(255,107,53,0.7); }
     }
     #speak-icon, #lang-icon { font-size: 1.1rem; }
     #lang-name {
       display: none;
       font-size: 0.78rem;
-      color: #2a6a3a;
+      color: #34d399;
       text-align: center;
       font-style: italic;
       margin-top: -6px;
+      opacity: 0.85;
     }
 
     /* ── SECCIÓN UNIFORMES ───────────────────────────── */
@@ -166,21 +173,21 @@
       align-items: center;
       width: 100%;
       gap: 8px;
-      border-top: 1px solid rgba(44,111,173,0.2);
+      border-top: 1px solid #1e3a5f;
       padding-top: 10px;
     }
 
     .kit-header {
       font-size: 0.72rem;
       font-weight: bold;
-      color: #4a6a8a;
+      color: #3a6a9a;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
     .kit-loading {
       font-size: 0.78rem;
-      color: #8aa0b8;
+      color: #3a6a9a;
       font-style: italic;
     }
 
@@ -208,7 +215,7 @@
 
     .kit-label {
       font-size: 0.62rem;
-      color: #5a7a9a;
+      color: #3a6a9a;
       text-align: center;
       font-style: italic;
     }
@@ -227,28 +234,29 @@
     .zoom-btn {
       width: 48px;
       height: 48px;
-      background: rgba(255,255,255,0.52);
+      background: rgba(7,17,30,0.75);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border: 1.5px solid rgba(255,255,255,0.65);
-      border-radius: 10px;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
       font-size: 1.4rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 0 10px rgba(74,158,255,0.1);
       user-select: none;
-      color: #1a3a5c;
-      transition: background 0.15s;
+      color: #4a9eff;
+      transition: all 0.15s;
     }
-    .zoom-btn:active { background: rgba(255,255,255,0.82); }
+    .zoom-btn:hover { background: rgba(74,158,255,0.12); box-shadow: 0 0 14px rgba(74,158,255,0.25); }
+    .zoom-btn:active { transform: scale(0.94); }
 
     /* ── TOOLTIP ─────────────────────────────────────── */
     #tooltip {
       position: absolute;
-      background: rgba(20,40,70,0.82);
-      color: white;
+      background: rgba(7,17,30,0.9);
+      color: #7ec8f5;
       padding: 5px 12px;
       border-radius: 6px;
       font-size: 0.85rem;
@@ -256,6 +264,8 @@
       display: none;
       white-space: nowrap;
       z-index: 20;
+      border: 1px solid #1e3a5f;
+      box-shadow: 0 0 10px rgba(74,158,255,0.15);
     }
 
     /* ── LOADING ─────────────────────────────────────── */
@@ -266,19 +276,19 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: rgba(232,244,248,0.92);
+      background: rgba(7,17,30,0.95);
       gap: 14px;
       z-index: 30;
     }
     .spinner {
       width: 42px; height: 42px;
-      border: 4px solid #c0d4e8;
-      border-top-color: #2c6fad;
+      border: 3px solid #1e3a5f;
+      border-top-color: #4a9eff;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    #loading p { color: #5a7a9a; font-size: 1rem; }
+    #loading p { color: #3a6a9a; font-size: 1rem; letter-spacing: 1px; }
 
     /* ── RESPONSIVE ──────────────────────────────────── */
     @media (max-width: 600px) {
@@ -293,7 +303,7 @@
       #flag-wrapper { width: 80px; }
       #country-name { font-size: 0.95rem; }
       #zoom-controls { bottom: 215px; }
-      .kit-item img { height: 60px; }
+      .kit-item img, .kit-item svg { height: 60px; }
     }
   </style>
 </head>
@@ -426,6 +436,58 @@ const NAMES = {
   "mh":"Islas Marshall","fm":"Micronesia","md":"Moldavia",
   "de":"Alemania","sa":"Arabia Saudita"
 };
+
+// ─────────────────────────────────────────────────────
+//  alpha-2  →  continente  (para colores del mapa)
+// ─────────────────────────────────────────────────────
+const A2_CONTINENT = {
+  // Europa
+  al:"eu",ad:"eu",at:"eu",by:"eu",be:"eu",ba:"eu",bg:"eu",hr:"eu",cy:"eu",
+  cz:"eu",dk:"eu",ee:"eu",fi:"eu",fr:"eu",de:"eu",gr:"eu",hu:"eu",is:"eu",
+  ie:"eu",it:"eu",lv:"eu",li:"eu",lt:"eu",lu:"eu",mk:"eu",mt:"eu",md:"eu",
+  mc:"eu",me:"eu",nl:"eu",no:"eu",pl:"eu",pt:"eu",ro:"eu",ru:"eu",sm:"eu",
+  rs:"eu",sk:"eu",si:"eu",es:"eu",se:"eu",ch:"eu",ua:"eu",gb:"eu",va:"eu",
+  am:"eu",az:"eu",ge:"eu",
+  // África
+  dz:"af",ao:"af",bj:"af",bw:"af",bf:"af",bi:"af",cv:"af",cm:"af",cf:"af",
+  td:"af",km:"af",cg:"af",cd:"af",ci:"af",dj:"af",eg:"af",gq:"af",er:"af",
+  et:"af",ga:"af",gm:"af",gh:"af",gn:"af",gw:"af",ke:"af",ls:"af",lr:"af",
+  ly:"af",mg:"af",mw:"af",ml:"af",mr:"af",mu:"af",ma:"af",mz:"af",na:"af",
+  ne:"af",ng:"af",rw:"af",st:"af",sn:"af",sl:"af",so:"af",za:"af",ss:"af",
+  sd:"af",sz:"af",tz:"af",tg:"af",tn:"af",ug:"af",zm:"af",zw:"af",
+  // Asia
+  af:"as",bh:"as",bd:"as",bt:"as",bn:"as",kh:"as",cn:"as",in:"as",id:"as",
+  ir:"as",iq:"as",il:"as",jp:"as",jo:"as",kz:"as",kw:"as",kg:"as",la:"as",
+  lb:"as",my:"as",mv:"as",mn:"as",mm:"as",np:"as",kp:"as",om:"as",pk:"as",
+  ps:"as",ph:"as",qa:"as",sa:"as",lk:"as",sy:"as",tj:"as",th:"as",tl:"as",
+  tm:"as",ae:"as",uz:"as",vn:"as",ye:"as",kr:"as",
+  // Norteamérica y Caribe
+  ag:"na",bs:"na",bb:"na",bz:"na",ca:"na",cr:"na",cu:"na",dm:"na",do:"na",
+  sv:"na",gd:"na",gt:"na",ht:"na",hn:"na",jm:"na",mx:"na",kn:"na",lc:"na",
+  vc:"na",tt:"na",us:"na",ni:"na",pa:"na",
+  // Sudamérica
+  ar:"sa",bo:"sa",br:"sa",cl:"sa",co:"sa",ec:"sa",gy:"sa",py:"sa",pe:"sa",
+  sr:"sa",uy:"sa",ve:"sa",fk:"sa",
+  // Oceanía
+  au:"oc",fj:"oc",ki:"oc",mh:"oc",fm:"oc",nr:"oc",nz:"oc",pw:"oc",pg:"oc",
+  ws:"oc",sb:"oc",to:"oc",tv:"oc",vu:"oc",nc:"oc",
+};
+
+// Colores por continente: fill base / fill hover / fill seleccionado
+const CONTINENT_COLORS = {
+  eu: {base:"#2e5faa", hover:"#4a7fd4", sel:"#90c4ff"},
+  af: {base:"#a04010", hover:"#c85a20", sel:"#ffaa60"},
+  as: {base:"#6a2ea0", hover:"#8e44c8", sel:"#d09aff"},
+  na: {base:"#0e6e50", hover:"#18986e", sel:"#5ce8b8"},
+  sa: {base:"#2a7a2a", hover:"#3aaa3a", sel:"#90f090"},
+  oc: {base:"#0e6080", hover:"#189ab0", sel:"#70deff"},
+};
+const CONTINENT_DEFAULT = {base:"#2a4060", hover:"#3a5880", sel:"#6ab0ff"};
+
+function getContinentColor(alpha2) {
+  const c = A2_CONTINENT[alpha2];
+  return c ? CONTINENT_COLORS[c] : CONTINENT_DEFAULT;
+}
 
 // ─────────────────────────────────────────────────────
 //  alpha-2  →  idioma(s) oficial(es) en español
@@ -842,21 +904,40 @@ fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
     g.selectAll('.country').data(features).join('path')
       .attr('class', 'country')
       .attr('d', path)
+      .style('fill', d => {
+        const a2 = NUM_TO_A2[+d.id];
+        return a2 ? getContinentColor(a2).base : CONTINENT_DEFAULT.base;
+      })
       .on('pointerover', function(evt, d) {
         const a2 = NUM_TO_A2[+d.id];
         const nm = a2 ? (NAMES[a2] || a2.toUpperCase()) : null;
-        if (nm && this !== selectedEl) showTooltip(evt, nm);
+        if (nm && this !== selectedEl) {
+          showTooltip(evt, nm);
+          d3.select(this).style('fill', getContinentColor(a2).hover);
+        }
       })
       .on('pointermove', function(evt) { if (this !== selectedEl) moveTooltip(evt); })
-      .on('pointerout',  ()  => hideTooltip())
+      .on('pointerout', function(evt, d) {
+        hideTooltip();
+        if (this !== selectedEl) {
+          const a2 = NUM_TO_A2[+d.id];
+          d3.select(this).style('fill', a2 ? getContinentColor(a2).base : CONTINENT_DEFAULT.base);
+        }
+      })
       .on('click', function(evt, d) {
         evt.stopPropagation();
         hideTooltip();
         const a2 = NUM_TO_A2[+d.id];
         const nm = a2 ? (NAMES[a2] || a2.toUpperCase()) : null;
         if (!a2) return;
-        if (selectedEl) d3.select(selectedEl).classed('selected', false);
-        d3.select(this).classed('selected', true);
+        // Restaurar color del anterior seleccionado
+        if (selectedEl) {
+          const prevA2 = NUM_TO_A2[+d3.select(selectedEl).datum().id];
+          d3.select(selectedEl)
+            .classed('selected', false)
+            .style('fill', prevA2 ? getContinentColor(prevA2).base : CONTINENT_DEFAULT.base);
+        }
+        d3.select(this).classed('selected', true).style('fill', getContinentColor(a2).sel);
         selectedEl = this;
         selectCountry(a2, nm);
       });
