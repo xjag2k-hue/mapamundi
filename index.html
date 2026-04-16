@@ -111,26 +111,37 @@
       text-shadow: 0 1px 3px rgba(255,255,255,0.8);
     }
 
-    /* ── BOTÓN ESCUCHAR ──────────────────────────────── */
-    #speak-btn {
+    /* ── BOTONES HABLAR ──────────────────────────────── */
+    #speak-btn, #lang-btn {
       display: none;
       align-items: center;
       justify-content: center;
       gap: 7px;
-      background: rgba(44,111,173,0.82);
       color: white;
       border: none;
       border-radius: 24px;
       padding: 9px 16px;
       font-size: 0.9rem;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(44,111,173,0.3);
       transition: background 0.15s, transform 0.1s;
       user-select: none;
       width: 100%;
     }
+    #speak-btn {
+      background: rgba(44,111,173,0.82);
+      box-shadow: 0 2px 8px rgba(44,111,173,0.3);
+    }
     #speak-btn:active { background: rgba(26,74,122,0.9); transform: scale(0.97); }
     #speak-btn.speaking {
+      background: rgba(224,90,0,0.85);
+      animation: pulse-btn 0.6s ease-in-out infinite alternate;
+    }
+    #lang-btn {
+      background: rgba(22,140,80,0.82);
+      box-shadow: 0 2px 8px rgba(22,140,80,0.3);
+    }
+    #lang-btn:active { background: rgba(14,100,55,0.9); transform: scale(0.97); }
+    #lang-btn.speaking {
       background: rgba(224,90,0,0.85);
       animation: pulse-btn 0.6s ease-in-out infinite alternate;
     }
@@ -138,7 +149,15 @@
       from { box-shadow: 0 2px 8px rgba(224,90,0,0.3); }
       to   { box-shadow: 0 4px 18px rgba(224,90,0,0.7); }
     }
-    #speak-icon { font-size: 1.1rem; }
+    #speak-icon, #lang-icon { font-size: 1.1rem; }
+    #lang-name {
+      display: none;
+      font-size: 0.78rem;
+      color: #2a6a3a;
+      text-align: center;
+      font-style: italic;
+      margin-top: -6px;
+    }
 
     /* ── SECCIÓN UNIFORMES ───────────────────────────── */
     #kit-section {
@@ -298,10 +317,15 @@
     <div class="placeholder-text">Tocá un país<br>en el mapa para<br>ver su bandera</div>
     <div id="flag-wrapper"><img id="flag-img" alt="Bandera"></div>
     <div id="country-name"></div>
-    <button id="speak-btn" title="Escuchar nombre">
+    <button id="speak-btn" title="Escuchar nombre del país">
       <span id="speak-icon">🔊</span>
       <span>Escuchar</span>
     </button>
+    <button id="lang-btn" title="Idioma oficial">
+      <span id="lang-icon">🗣️</span>
+      <span>Idioma oficial</span>
+    </button>
+    <div id="lang-name"></div>
     <!-- Sección de uniformes -->
     <div id="kit-section">
       <div class="kit-header">⚽ Uniformes de Fútbol</div>
@@ -382,7 +406,7 @@ const NAMES = {
   "mu":"Mauricio","mx":"México","mc":"Mónaco","mn":"Mongolia","me":"Montenegro",
   "mz":"Mozambique","mm":"Myanmar","na":"Namibia","nr":"Nauru","np":"Nepal",
   "ni":"Nicaragua","ne":"Níger","ng":"Nigeria","kp":"Corea del Norte",
-  "no":"Noruega","nz":"Nueva Zelanda","om":"Omán","nl":"Países Bajos",
+  "no":"Noruega","nz":"Nueva Zelanda","om":"Omán","nl":"Holanda",
   "pk":"Pakistán","pw":"Palaos","ps":"Palestina","pa":"Panamá",
   "pg":"Papúa Nueva Guinea","py":"Paraguay","pe":"Perú","pl":"Polonia",
   "pt":"Portugal","qa":"Catar","gb":"Reino Unido","ro":"Rumanía","ru":"Rusia",
@@ -401,6 +425,63 @@ const NAMES = {
   "fk":"Islas Malvinas","nc":"Nueva Caledonia","kr":"Corea del Sur",
   "mh":"Islas Marshall","fm":"Micronesia","md":"Moldavia",
   "de":"Alemania","sa":"Arabia Saudita"
+};
+
+// ─────────────────────────────────────────────────────
+//  alpha-2  →  idioma(s) oficial(es) en español
+// ─────────────────────────────────────────────────────
+const LANGUAGES = {
+  "af":"Pastún y Dari","al":"Albanés","dz":"Árabe y Bereber","ad":"Catalán",
+  "ao":"Portugués","ag":"Inglés","ar":"Español","au":"Inglés","at":"Alemán",
+  "bs":"Inglés","bh":"Árabe","bd":"Bengalí","bb":"Inglés",
+  "be":"Neerlandés, Francés y Alemán","bz":"Inglés","bj":"Francés","bt":"Dzongkha",
+  "bo":"Español, Quechua y Aymara","ba":"Bosnio, Croata y Serbio",
+  "bw":"Inglés y Tswana","br":"Portugués","bn":"Malayo","bg":"Búlgaro",
+  "bf":"Francés","bi":"Kirundi y Francés","cv":"Portugués","kh":"Khmer",
+  "cm":"Francés e Inglés","ca":"Inglés y Francés","cf":"Sango y Francés",
+  "td":"Árabe y Francés","cl":"Español","cn":"Chino mandarín","cy":"Griego y Turco",
+  "co":"Español","km":"Comorense, Árabe y Francés","cg":"Francés","cd":"Francés",
+  "cr":"Español","ci":"Francés","hr":"Croata","cu":"Español","cz":"Checo",
+  "dk":"Danés","dj":"Árabe, Somalí y Francés","dm":"Inglés","do":"Español",
+  "ec":"Español","eg":"Árabe","sv":"Español","ae":"Árabe",
+  "er":"Tigriña, Árabe e Inglés","sk":"Eslovaco","si":"Esloveno","es":"Español",
+  "us":"Inglés","ee":"Estonio","et":"Amhárico","ph":"Filipino e Inglés",
+  "fi":"Finés y Sueco","fj":"Inglés, Fiyiano e Hindi","fr":"Francés","ga":"Francés",
+  "gm":"Inglés","ge":"Georgiano","gh":"Inglés","gd":"Inglés","gr":"Griego",
+  "gt":"Español","gn":"Francés","gq":"Español, Francés y Portugués","gw":"Portugués",
+  "gy":"Inglés","ht":"Francés y Criollo haitiano","hn":"Español","hu":"Húngaro",
+  "in":"Hindi e Inglés","id":"Indonesio","iq":"Árabe y Kurdo","ir":"Persa",
+  "ie":"Inglés e Irlandés","is":"Islandés","il":"Hebreo y Árabe","it":"Italiano",
+  "jm":"Inglés","jp":"Japonés","jo":"Árabe","kz":"Kazajo y Ruso",
+  "ke":"Swahili e Inglés","kg":"Kirguís y Ruso","ki":"Inglés y Gilbertés",
+  "kw":"Árabe","la":"Laosiano","ls":"Sesoto e Inglés","lv":"Letón","lb":"Árabe",
+  "lr":"Inglés","ly":"Árabe","li":"Alemán","lt":"Lituano","lu":"Luxemburgués, Francés y Alemán",
+  "mk":"Macedonio","mg":"Malgache y Francés","my":"Malayo","mw":"Chichewa e Inglés",
+  "mv":"Maldivo","ml":"Francés","mt":"Maltés e Inglés","ma":"Árabe y Bereber",
+  "mr":"Árabe","mu":"Inglés, Francés y Criollo","mx":"Español","mc":"Francés",
+  "mn":"Mongol","me":"Montenegrino","mz":"Portugués","mm":"Birmano",
+  "na":"Inglés","nr":"Nauruano e Inglés","np":"Nepalés","ni":"Español",
+  "ne":"Francés","ng":"Inglés","no":"Noruego","nz":"Inglés y Maorí","om":"Árabe",
+  "nl":"Holandés","pk":"Urdu e Inglés","pw":"Palauano e Inglés","ps":"Árabe",
+  "pa":"Español","pg":"Inglés, Tok Pisin y Hiri Motu","py":"Español y Guaraní",
+  "pe":"Español, Quechua y Aymara","pl":"Polaco","pt":"Portugués","qa":"Árabe",
+  "gb":"Inglés","ro":"Rumano","ru":"Ruso","rw":"Kinyarwanda, Francés e Inglés",
+  "kn":"Inglés","sm":"Italiano","vc":"Inglés","lc":"Inglés","st":"Portugués",
+  "sn":"Francés","rs":"Serbio","sl":"Inglés","sb":"Inglés","so":"Somalí y Árabe",
+  "lk":"Cingalés y Tamil","sz":"Suazi e Inglés",
+  "za":"Once idiomas oficiales, principalmente Inglés y Zulú",
+  "ss":"Inglés","sd":"Árabe e Inglés","se":"Sueco",
+  "ch":"Alemán, Francés, Italiano y Romanche","sr":"Neerlandés","sy":"Árabe",
+  "tj":"Tayiko","tz":"Swahili e Inglés","th":"Tailandés","tl":"Tetum y Portugués",
+  "tg":"Francés","to":"Tongano e Inglés","tt":"Inglés","tn":"Árabe","tm":"Turcomano",
+  "tr":"Turco","tv":"Tuvaluano e Inglés","ua":"Ucraniano","ug":"Inglés y Swahili",
+  "uy":"Español","uz":"Uzbeko","vu":"Bislama, Inglés y Francés","va":"Italiano y Latín",
+  "ve":"Español","vn":"Vietnamita","ws":"Samoano e Inglés","ye":"Árabe",
+  "zm":"Inglés","zw":"Inglés, Shona y Ndebele","by":"Bielorruso y Ruso",
+  "am":"Armenio","az":"Azerbaiyano","fk":"Inglés","nc":"Francés",
+  "kr":"Coreano","mh":"Marshalés e Inglés","fm":"Inglés","md":"Rumano",
+  "de":"Alemán","sa":"Árabe","ad":"Catalán","kp":"Coreano",
+  "ky":"Inglés","mf":"Francés","re":"Francés","gp":"Francés","mq":"Francés"
 };
 
 // ─────────────────────────────────────────────────────
@@ -673,6 +754,30 @@ function speakName(name) {
 speakBtn.addEventListener('click', () => { if (lastSpokenName) speakName(lastSpokenName); });
 
 // ─────────────────────────────────────────────────────
+//  Botón de idioma oficial
+// ─────────────────────────────────────────────────────
+const langBtn  = document.getElementById('lang-btn');
+const langIcon = document.getElementById('lang-icon');
+const langNameEl = document.getElementById('lang-name');
+let lastLanguageText = '';
+
+function speakLanguage(lang) {
+  if (!synth || !lang) return;
+  synth.cancel();
+  const hasMultiple = lang.includes(' y ') || lang.includes(',');
+  const phrase = hasMultiple
+    ? `Los idiomas oficiales son: ${lang}`
+    : `El idioma oficial es el ${lang}`;
+  const u = new SpeechSynthesisUtterance(phrase);
+  u.lang = 'es-ES'; u.rate = 0.88; u.pitch = 1.05;
+  if (spanishVoice) u.voice = spanishVoice;
+  langBtn.classList.add('speaking');
+  u.onend = u.onerror = () => langBtn.classList.remove('speaking');
+  synth.speak(u);
+}
+langBtn.addEventListener('click', () => { if (lastLanguageText) speakLanguage(lastLanguageText); });
+
+// ─────────────────────────────────────────────────────
 //  Info panel
 // ─────────────────────────────────────────────────────
 const flagWrapper     = document.getElementById('flag-wrapper');
@@ -699,6 +804,18 @@ function selectCountry(alpha2, name) {
   countryNameEl.textContent  = name;
   lastSpokenName = name;
   speakName(name);
+
+  // Idioma oficial
+  const lang = LANGUAGES[alpha2] || null;
+  lastLanguageText = lang || '';
+  if (lang) {
+    langBtn.style.display   = 'flex';
+    langNameEl.style.display= 'block';
+    langNameEl.textContent  = lang;
+  } else {
+    langBtn.style.display   = 'none';
+    langNameEl.style.display= 'none';
+  }
 
   // Mostrar sección de kits
   kitSection.style.display = 'flex';
